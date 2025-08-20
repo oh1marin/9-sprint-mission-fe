@@ -1,356 +1,228 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 - 판다마켓</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_TRACKING_ID');
-    </script>
-    
-    <style>
-        /* CSS 변수 (Color Palette) */
-        :root {
-            --primary-blue: #3692FF;
-            --background-gray: #F8F9FA;
-            --text-dark: #374151;
-            --text-gray: #6B7280;
-            --text-light: #9CA3AF;
-            --border-gray: #D1D5DB;
-            --border-light: #E5E7EB;
-            --white: #FFFFFF;
-            --google-blue: #4285F4;
-            --kakao-yellow: #FEE500;
-            --kakao-text: #3C1E1E;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>로그인 - 판다마켓</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700&display=swap" rel="stylesheet"/>
 
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <style>
+    /* 전체 화면 흰 배경 + 가운데 정렬 */
+    body {
+      margin: 0;
+      background: #fff;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 60px;
+    }
 
-        html, body {
-            height: 100%;
-        }
+    /* 메인 박스 */
+    .box1 {
+      width: 640px;
+      height: 618px;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+    }
 
-        body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--background-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 32px;
-        }
+    /* 로고 부분 */
+    .logo1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .logo1 img {
+      width: 396px;
+      height: 132px;
+      object-fit: contain;
+    }
 
-        .login-container {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 48px 40px;
-            width: 100%;
-            max-width: 448px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
+    /* 입력칸 그룹 */
+    .group1 { margin: 14px 0; }
+    .label1 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .input1 {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      font-size: 16px;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      background: #F3F4F6;
+      box-sizing: border-box;
+    }
+    .input1:focus {
+      outline: none;
+      border-color: #3692FF;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(54,146,255,.12);
+    }
+    .input1::placeholder { color: #9CA3AF; }
 
-        .logo-section {
-            text-align: center;
-            margin-bottom: 48px;
-            margin-top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    /* 비밀번호 눈 버튼 */
+    .password1 { position: relative; }
+    .eye1 {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: #E5E7EB;
+      color: #6B7280;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-        .logo-link {
-            text-decoration: none;
-            cursor: pointer;
-            display: inline-block;
-            width: 396px;
-            height: 132px;
-        }
+    /* 로그인 버튼 */
+    .btn1 {
+      width: 100%;
+      height: 48px;
+      border: none;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: #9CA3AF;
+      cursor: not-allowed;
+      margin-top: 10px;
+    }
+    .btn1.active {
+      background: #3692FF;
+      cursor: pointer;
+    }
 
-        .logo-link img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+    /* 소셜 로그인 바 */
+    .social1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #EAF3FF;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 16px;
+    }
+    .social1 .text1 {
+      font-size: 14px;
+      color: #374151;
+      font-weight: 500;
+    }
+    .icons1 { display: flex; gap: 12px; }
+    .icon1 {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      border: 1px solid #D1D5DB;
+      background: #fff;
+    }
+    .icon1.g { color: #4285F4; }
+    .icon1.k { background: #FEE500; color: #3C1E1E; border: none; }
 
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Pretendard', sans-serif;
-            background: #F9FAFB;
-            transition: border 0.2s, box-shadow 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border: 2px solid var(--primary-blue);
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(54, 146, 255, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-light);
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--text-light);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: not-allowed;
-            margin-bottom: 16px;
-            font-family: 'Pretendard', sans-serif;
-            transition: background-color 0.2s;
-        }
-
-        .login-btn.active {
-            background: var(--primary-blue);
-            cursor: pointer;
-        }
-
-        .login-btn.active:hover {
-            background: #2563EB;
-        }
-
-        .social-login {
-            margin-top: 24px;
-        }
-
-        .social-login-text {
-            font-size: 14px;
-            color: var(--text-gray);
-            margin-bottom: 16px;
-        }
-
-        .social-btns {
-            display: flex;
-            gap: 12px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 14px;
-            border: 1px solid var(--border-gray);
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: 'Pretendard', sans-serif;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-
-        .google-btn {
-            background: var(--white);
-            color: var(--text-dark);
-        }
-
-        .google-btn:hover {
-            background: #F9FAFB;
-        }
-
-        .kakao-btn {
-            background: var(--kakao-yellow);
-            color: var(--kakao-text);
-        }
-
-        .kakao-btn:hover {
-            background: #FDD835;
-        }
-
-        .social-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .google-icon {
-            background: var(--google-blue);
-            color: var(--white);
-        }
-
-        .kakao-icon {
-            background: var(--kakao-text);
-            color: var(--kakao-yellow);
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .signup-link a {
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    /* 아래 링크 */
+    .bottom1 {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6B7280;
+    }
+    .bottom1 a { color: #3692FF; text-decoration: none; font-weight: 700; }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <!-- 로고 섹션 -->
-        <div class="logo-section">
-            <a href="/" class="logo-link">
-                <img src="images/pandalogo.png" alt="판다마켓 로고">
-            </a>
-        </div>
-
-        <!-- 로그인 폼 -->
-        <form id="loginForm">
-            <div class="form-group">
-                <label class="form-label" for="email">이메일</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    class="form-input" 
-                    placeholder="이메일을 입력해주세요"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="password">비밀번호</label>
-                <div class="password-wrapper">
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="form-input" 
-                        placeholder="비밀번호를 입력해주세요"
-                        required
-                    >
-                    <button type="button" class="password-toggle" id="passwordToggle">👁</button>
-                </div>
-            </div>
-
-            <button type="submit" class="login-btn" id="loginBtn">로그인</button>
-        </form>
-
-        <!-- 소셜 로그인 -->
-        <div class="social-login">
-            <p class="social-login-text">간편 로그인하기</p>
-            
-            <div class="social-btns">
-                <a href="https://www.google.com/" target="_blank" class="social-btn google-btn">
-                    <div class="social-icon google-icon">G</div>
-                    Google
-                </a>
-                <a href="https://www.kakaocorp.com/page/" target="_blank" class="social-btn kakao-btn">
-                    <div class="social-icon kakao-icon">K</div>
-                    Kakao
-                </a>
-            </div>
-        </div>
-
-        <!-- 회원가입 링크 -->
-        <div class="signup-link">
-            <p>판다마켓이 처음이신가요? <a href="signup.html">회원가입</a></p>
-        </div>
+  <div class="box1">
+    <!-- 로고 -->
+    <div class="logo1">
+      <img src="images/pandalogo.png" alt="판다 로고">
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const loginBtn = document.getElementById('loginBtn');
-            const passwordToggle = document.getElementById('passwordToggle');
-            const loginForm = document.getElementById('loginForm');
+    <!-- 폼 -->
+    <form id="form-login">
+      <div class="group1">
+        <label for="email" class="label1">이메일</label>
+        <input id="email" type="email" class="input1" placeholder="이메일을 입력해주세요" required />
+      </div>
 
-            // 입력 필드 변화 감지
-            function checkInputs() {
-                const emailValue = emailInput.value.trim();
-                const passwordValue = passwordInput.value.trim();
-                
-                if (emailValue && passwordValue) {
-                    loginBtn.classList.add('active');
-                    loginBtn.disabled = false;
-                } else {
-                    loginBtn.classList.remove('active');
-                    loginBtn.disabled = true;
-                }
-            }
+      <div class="group1">
+        <label for="password" class="label1">비밀번호</label>
+        <div class="password1">
+          <input id="password" type="password" class="input1" placeholder="비밀번호를 입력해주세요" required />
+          <button type="button" id="btn-toggle" class="eye1">👁</button>
+        </div>
+      </div>
 
-            emailInput.addEventListener('input', checkInputs);
-            passwordInput.addEventListener('input', checkInputs);
+      <button type="submit" id="btn-login" class="btn1">로그인</button>
+    </form>
 
-            // 비밀번호 보기/숨기기
-            passwordToggle.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                passwordToggle.textContent = type === 'password' ? '👁' : '🙈';
-            });
+    <!-- 간편 로그인 -->
+    <div class="social1">
+      <span class="text1">간편 로그인하기</span>
+      <div class="icons1">
+        <a class="icon1 g" href="https://www.google.com/" target="_blank">G</a>
+        <a class="icon1 k" href="https://www.kakaocorp.com/page/" target="_blank">K</a>
+      </div>
+    </div>
 
-            // 로그인 폼 제출
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                if (loginBtn.classList.contains('active')) {
-                    alert('로그인 기능은 아직 구현되지 않았습니다.');
-                    window.location.href = 'index.html';
-                }
-            });
-        });
-    </script>
+    <!-- 하단 링크 -->
+    <div class="bottom1">
+      판다마켓이 처음이신가요? <a href="signup.html">회원가입</a>
+    </div>
+  </div>
+
+  <script>
+    const email = document.getElementById('email');
+    const pwd = document.getElementById('password');
+    const btn = document.getElementById('btn-login');
+    const tog = document.getElementById('btn-toggle');
+    const form = document.getElementById('form-login');
+
+    // 버튼 활성화 함수
+    function updateBtn() {
+      const ok = email.value.trim() || pwd.value.trim();
+      if (ok) {
+        btn.classList.add('active');
+        btn.disabled = false;
+      } else {
+        btn.classList.remove('active');
+        btn.disabled = true;
+      }
+    }
+    updateBtn();
+    email.addEventListener('input', updateBtn);
+    pwd.addEventListener('input', updateBtn);
+
+    // 비밀번호 보기/숨기기
+    tog.addEventListener('click', () => {
+      const p = pwd.type === 'password';
+      pwd.type = p ? 'text' : 'password';
+      tog.textContent = p ? '🙈' : '👁';
+    });
+
+    // 폼 제출
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!btn.classList.contains('active')) return;
+      alert('로그인 기능은 아직 구현되지 않았습니다.');
+      location.href = 'index.html';
+    });
+  </script>
 </body>
 </html>

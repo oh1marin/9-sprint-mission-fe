@@ -1,388 +1,256 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>회원가입 - 판다마켓</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700&display=swap" rel="stylesheet"/>
+
     <style>
-        /* CSS 변수 (Color Palette) */
-        :root {
-            --primary-blue: #3692FF;
-            --background-gray: #F8F9FA;
-            --text-dark: #374151;
-            --text-gray: #6B7280;
-            --text-light: #9CA3AF;
-            --border-gray: #D1D5DB;
-            --border-light: #E5E7EB;
-            --white: #FFFFFF;
-            --google-blue: #4285F4;
-            --kakao-yellow: #FEE500;
-            --kakao-text: #3C1E1E;
-        }
-
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-        }
-
+        /* 전체 화면 흰 배경 + 가운데 정렬 */
         body {
+            margin: 0;
+            background: #fff;
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--background-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            padding: 32px;
-        }
-
-        .signup-container {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 48px 40px;
-            width: 100%;
-            max-width: 448px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-section {
-            text-align: center;
-            margin-bottom: 48px;
-            margin-top: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding-top: 60px;
         }
 
-        .logo-link {
-            text-decoration: none;
-            cursor: pointer;
-            display: inline-block;
+        /* 메인 박스 */
+        .box2 {
+            width: 640px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+
+        /* 로고 부분 */
+        .logo2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+        .logo2 img {
             width: 396px;
             height: 132px;
-        }
-
-        .logo-link img {
-            width: 100%;
-            height: 100%;
             object-fit: contain;
         }
 
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
+        /* 입력칸 그룹 */
+        .group2 { margin: 14px 0; }
+        .label2 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 6px;
             display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 8px;
         }
-
-        .form-input {
+        .input2 {
             width: 100%;
-            padding: 14px 16px;
-            border: none; /* focus out 시 테두리 없음 */
-            border-radius: 8px;
+            height: 48px;
+            padding: 0 16px;
             font-size: 16px;
-            font-family: 'Pretendard', sans-serif;
-            background: #F9FAFB;
-            transition: border 0.2s, box-shadow 0.2s;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            background: #F3F4F6;
+            box-sizing: border-box;
         }
-
-        .form-input:focus {
+        .input2:focus {
             outline: none;
-            border: 2px solid var(--primary-blue); /* focus in 시 #3692FF */
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(54, 146, 255, 0.1);
+            border-color: #3692FF;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(54,146,255,.12);
         }
+        .input2::placeholder { color: #9CA3AF; }
 
-        .form-input::placeholder {
-            color: var(--text-light);
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-toggle {
+        /* 비밀번호 눈 버튼 */
+        .password2 { position: relative; }
+        .eye2 {
             position: absolute;
-            right: 16px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
+            width: 36px;
+            height: 36px;
             border: none;
-            color: var(--text-gray);
+            background: #E5E7EB;
+            color: #6B7280;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 20px;
         }
 
-        .signup-btn {
+        /* 회원가입 버튼 */
+        .btn2 {
             width: 100%;
-            padding: 14px;
-            background: var(--text-light);
-            color: var(--white);
+            height: 48px;
             border: none;
-            border-radius: 8px;
+            border-radius: 9999px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
+            color: #fff;
+            background: #9CA3AF;
             cursor: not-allowed;
-            margin-bottom: 16px;
-            font-family: 'Pretendard', sans-serif;
-            transition: background-color 0.2s;
+            margin-top: 10px;
         }
-
-        .signup-btn.active {
-            background: var(--primary-blue);
+        .btn2.active {
+            background: #3692FF;
             cursor: pointer;
         }
 
-        .signup-btn.active:hover {
-            background: #2563EB;
-        }
-
-        .social-login {
-            margin-top: 24px;
-        }
-
-        .social-login-text {
-            font-size: 14px;
-            color: var(--text-gray);
-            margin-bottom: 16px;
-        }
-
-        .social-btns {
-            display: flex;
-            gap: 12px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 14px;
-            border: 1px solid var(--border-gray);
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
+        /* 소셜 회원가입 바 */
+        .social2 {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: 'Pretendard', sans-serif;
-            text-decoration: none;
-            transition: background-color 0.2s;
+            justify-content: space-between;
+            background: #EAF3FF;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 16px;
         }
-
-        .google-btn {
-            background: var(--white);
-            color: var(--text-dark);
+        .social2 .text2 {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
         }
-
-        .google-btn:hover {
-            background: #F9FAFB;
-        }
-
-        .kakao-btn {
-            background: var(--kakao-yellow);
-            color: var(--kakao-text);
-        }
-
-        .kakao-btn:hover {
-            background: #FDD835;
-        }
-
-        .social-icon {
-            width: 20px;
-            height: 20px;
+        .icons2 { display: flex; gap: 12px; }
+        .icon2 {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .google-icon {
-            background: var(--google-blue);
-            color: var(--white);
-        }
-
-        .kakao-icon {
-            background: var(--kakao-text);
-            color: var(--kakao-yellow);
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .login-link a {
-            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 16px;
             text-decoration: none;
-            font-weight: 500;
+            border: 1px solid #D1D5DB;
+            background: #fff;
         }
+        .icon2.g { color: #4285F4; }
+        .icon2.k { background: #FEE500; color: #3C1E1E; border: none; }
 
-        .login-link a:hover {
-            text-decoration: underline;
+        /* 아래 링크 */
+        .bottom2 {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #6B7280;
         }
+        .bottom2 a { color: #3692FF; text-decoration: none; font-weight: 700; }
     </style>
 </head>
 <body>
-    <div class="signup-container">
-        <!-- 로고 섹션 -->
-        <div class="logo-section">
-            <a href="/" class="logo-link">
-                <img src="images/pandalogo.png" alt="판다마켓 로고">
-            </a>
+    <div class="box2">
+        <!-- 로고 -->
+        <div class="logo2">
+            <img src="images/pandalogo.png" alt="판다 로고">
         </div>
 
-        <!-- 회원가입 폼 -->
-        <form id="signupForm">
-            <div class="form-group">
-                <label class="form-label" for="email">이메일</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    class="form-input" 
-                    placeholder="이메일을 입력해주세요"
-                    required
-                >
+        <!-- 폼 -->
+        <form id="form-signup">
+            <div class="group2">
+                <label for="email" class="label2">이메일</label>
+                <input id="email" type="email" class="input2" placeholder="이메일을 입력해주세요" required />
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="nickname">닉네임</label>
-                <input 
-                    type="text" 
-                    id="nickname" 
-                    class="form-input" 
-                    placeholder="닉네임을 입력해주세요"
-                    required
-                >
+            <div class="group2">
+                <label for="nickname" class="label2">닉네임</label>
+                <input id="nickname" type="text" class="input2" placeholder="닉네임을 입력해주세요" required />
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="password">비밀번호</label>
-                <div class="password-wrapper">
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="form-input" 
-                        placeholder="비밀번호를 입력해주세요"
-                        required
-                    >
-                    <button type="button" class="password-toggle" id="passwordToggle">👁</button>
+            <div class="group2">
+                <label for="password" class="label2">비밀번호</label>
+                <div class="password2">
+                    <input id="password" type="password" class="input2" placeholder="비밀번호를 입력해주세요" required />
+                    <button type="button" id="toggle-password" class="eye2">👁</button>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="passwordConfirm">비밀번호 확인</label>
-                <div class="password-wrapper">
-                    <input 
-                        type="password" 
-                        id="passwordConfirm" 
-                        class="form-input" 
-                        placeholder="비밀번호를 다시 입력해주세요"
-                        required
-                    >
-                    <button type="button" class="password-toggle" id="passwordConfirmToggle">👁</button>
+            <div class="group2">
+                <label for="password-confirm" class="label2">비밀번호 확인</label>
+                <div class="password2">
+                    <input id="password-confirm" type="password" class="input2" placeholder="비밀번호를 다시 입력해주세요" required />
+                    <button type="button" id="toggle-confirm" class="eye2">👁</button>
                 </div>
             </div>
 
-            <button type="submit" class="signup-btn" id="signupBtn">회원가입</button>
+            <button type="submit" id="btn-signup" class="btn2">회원가입</button>
         </form>
 
-        <!-- 소셜 로그인 -->
-        <div class="social-login">
-            <p class="social-login-text">간편 회원가입하기</p>
-            
-            <div class="social-btns">
-                <a href="https://www.google.com/" target="_blank" class="social-btn google-btn">
-                    <div class="social-icon google-icon">G</div>
-                    Google
-                </a>
-                <a href="https://www.kakaocorp.com/page/" target="_blank" class="social-btn kakao-btn">
-                    <div class="social-icon kakao-icon">K</div>
-                    Kakao
-                </a>
+        <!-- 간편 회원가입 -->
+        <div class="social2">
+            <span class="text2">간편 회원가입하기</span>
+            <div class="icons2">
+                <a class="icon2 g" href="https://www.google.com/" target="_blank">G</a>
+                <a class="icon2 k" href="https://www.kakaocorp.com/page/" target="_blank">K</a>
             </div>
         </div>
 
-        <!-- 로그인 링크 -->
-        <div class="login-link">
-            <p>이미 회원이신가요? <a href="/login">로그인</a></p>
+        <!-- 하단 링크 -->
+        <div class="bottom2">
+            이미 회원이신가요? <a href="login.html">로그인</a>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const emailInput = document.getElementById('email');
-            const nicknameInput = document.getElementById('nickname');
-            const passwordInput = document.getElementById('password');
-            const passwordConfirmInput = document.getElementById('passwordConfirm');
-            const signupBtn = document.getElementById('signupBtn');
-            const passwordToggle = document.getElementById('passwordToggle');
-            const passwordConfirmToggle = document.getElementById('passwordConfirmToggle');
-            const signupForm = document.getElementById('signupForm');
+        const email = document.getElementById('email');
+        const nickname = document.getElementById('nickname');
+        const pwd = document.getElementById('password');
+        const pwd2 = document.getElementById('password-confirm');
+        const btn = document.getElementById('btn-signup');
+        const form = document.getElementById('form-signup');
 
-            // 입력 필드 변화 감지
-            function checkInputs() {
-                const emailValue = emailInput.value.trim();
-                const nicknameValue = nicknameInput.value.trim();
-                const passwordValue = passwordInput.value.trim();
-                const passwordConfirmValue = passwordConfirmInput.value.trim();
-                
-                if (emailValue && nicknameValue && passwordValue && passwordConfirmValue) {
-                    signupBtn.classList.add('active');
-                    signupBtn.disabled = false;
-                } else {
-                    signupBtn.classList.remove('active');
-                    signupBtn.disabled = true;
-                }
+        const togglePwd = document.getElementById('toggle-password');
+        const togglePwd2 = document.getElementById('toggle-confirm');
+
+        // 버튼 활성화 함수
+        function updateBtn() {
+            const ok = email.value.trim() || nickname.value.trim() || pwd.value.trim() || pwd2.value.trim();
+            if (ok) {
+                btn.classList.add('active');
+                btn.disabled = false;
+            } else {
+                btn.classList.remove('active');
+                btn.disabled = true;
+            }
+        }
+        updateBtn();
+        email.addEventListener('input', updateBtn);
+        nickname.addEventListener('input', updateBtn);
+        pwd.addEventListener('input', updateBtn);
+        pwd2.addEventListener('input', updateBtn);
+
+        // 비밀번호 보기/숨기기 함수
+        function bindToggle(buttonEl, inputEl) {
+            buttonEl.addEventListener('click', () => {
+                const p = inputEl.type === 'password';
+                inputEl.type = p ? 'text' : 'password';
+                buttonEl.textContent = p ? '🙈' : '👁';
+            });
+        }
+
+        bindToggle(togglePwd, pwd);
+        bindToggle(togglePwd2, pwd2);
+
+        // 폼 제출
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!btn.classList.contains('active')) return;
+
+            if (pwd.value !== pwd2.value) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
             }
 
-            emailInput.addEventListener('input', checkInputs);
-            nicknameInput.addEventListener('input', checkInputs);
-            passwordInput.addEventListener('input', checkInputs);
-            passwordConfirmInput.addEventListener('input', checkInputs);
-
-            // 비밀번호 보기/숨기기
-            passwordToggle.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                passwordToggle.textContent = type === 'password' ? '👁' : '🙈';
-            });
-
-            passwordConfirmToggle.addEventListener('click', function() {
-                const type = passwordConfirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordConfirmInput.setAttribute('type', type);
-                passwordConfirmToggle.textContent = type === 'password' ? '👁' : '🙈';
-            });
-
-            // 회원가입 폼 제출
-            signupForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                if (signupBtn.classList.contains('active')) {
-                    if (passwordInput.value !== passwordConfirmInput.value) {
-                        alert('비밀번호가 일치하지 않습니다.');
-                        return;
-                    }
-                    
-                    alert('회원가입 기능은 아직 구현되지 않았습니다.');
-                    window.location.href = 'index.html';
-                }
-            });
+            alert('회원가입 기능은 아직 구현되지 않았습니다.');
+            location.href = 'index.html';
         });
     </script>
 </body>
