@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 목록 - 판다마켓</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 상단 메뉴바 */
+        .nav1 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DFDFDF;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .nav-box1 {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 200px;
+        }
+        
+        .logo3 {
+            width: 200px;
+            height: 67px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .logo3 img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .btn3 {
+            background: #3B82F6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .btn3:hover { background: #2563EB; }
+
+        /* 메인 컨텐츠 */
+        .main1 {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 70px;
+            padding: 50px 20px;
+        }
+        
+        .content1 {
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .content1 h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 20px;
+        }
+        
+        .content1 p {
+            font-size: 18px;
+            color: #6B7280;
+            margin-bottom: 30px;
+        }
+        
+        .home-btn1 {
+            background: #3B82F6;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .home-btn1:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 메뉴 -->
+    <nav class="nav1">
+        <div class="nav-box1">
+            <a href="/" class="logo3">
+                <img src="images/pandalogo.png" alt="판다마켓 로고">
+            </a>
+            <a href="login.html" class="btn3">로그인</a>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main1">
+        <div class="content1">
+            <h1>상품 목록</h1>
+            <p>아직 준비 중인 페이지입니다.<br>곧 다양한 상품들을 만나보실 수 있어요!</p>
+            <a href="/" class="home-btn1">홈으로 돌아가기</a>
+        </div>
+    </main>
+</body>
+</html>
