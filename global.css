@@ -30,6 +30,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 200px;
+    gap: 80px;
 }
 
 .brand-logo {
@@ -39,6 +40,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .brand-logo img {
@@ -284,6 +286,74 @@ body {
     box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
 }
 
+/* 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content {
+    padding: 32px 24px 24px;
+    text-align: center;
+}
+
+.modal-message {
+    font-size: 16px;
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    word-break: keep-all;
+}
+
+.modal-close-button {
+    background: #3B82F6;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-width: 80px;
+}
+
+.modal-close-button:hover {
+    background: #2563EB;
+}
+
+/* 폼 입력 에러 스타일 */
+.text-input.error {
+    border-color: #DC2626 !important;
+    background: #FEF2F2;
+}
+
+.error-message {
+    color: #DC2626;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
 /* 클릭 가능한 요소들 */
 .brand-logo, 
 .bottom-navigation-link a, 
@@ -294,16 +364,37 @@ body {
 }
 
 /* 반응형 디자인 */
-@media (min-width: 1920px) {
+
+/* PC: 1200px 이상 */
+@media (min-width: 1200px) {
     .nav-container {
-        max-width: 1520px;
-        margin: 0 auto;
+        padding: 0 200px;
     }
 }
 
-@media (max-width: 1919px) {
+/* Tablet: 744px ~ 1199px */
+@media (min-width: 744px) and (max-width: 1199px) {
     .nav-container {
-        padding: 0 200px;
+        padding: 0 24px;
+    }
+}
+
+/* Mobile: 375px ~ 743px */  
+@media (min-width: 375px) and (max-width: 743px) {
+    .nav-container {
+        padding: 0 16px;
+    }
+    
+    /* 모바일에서 폼 컨테이너 반응형 */
+    .form-container {
+        width: calc(100% - 32px);
+        max-width: 400px;
+        padding: 0 16px;
+    }
+    
+    .form-logo img {
         width: 100%;
+        max-width: 300px;
+        height: auto;
     }
 }

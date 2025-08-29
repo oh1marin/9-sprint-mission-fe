@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>판다마켓</title>
+    
+    <!-- Open Graph 메타 태그 -->
+    <meta property="og:title" content="판다마켓" />
+    <meta property="og:description" content="일상에서 모든 물건을 거래해보세요" />
+    <meta property="og:image" content="https://mellifluous-empanada-fa5948.netlify.app/images/pandalogo.png" />
+    <meta property="og:url" content="https://mellifluous-empanada-fa5948.netlify.app/" />
+    <meta property="og:type" content="website" />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,6 +19,12 @@
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="global.css">
     <style>
+        /* 네비게이션 간격 강제 적용 */
+        .nav-container {
+            justify-content: space-between !important;
+            padding: 0 100px !important;
+        }
+        
         /* 메인 페이지만의 스타일 */
         .hero-section {
             background: #BFDBFE;
@@ -169,28 +183,97 @@
         }
 
         /* 반응형 디자인 */
-        @media (min-width: 1920px) {
+        
+        /* PC: 1200px 이상 */
+        @media (min-width: 1200px) {
             .hero-section, .trust-section {
                 background: #BFDBFE;
                 width: 100%;
             }
-            .footer-container {
-                max-width: 1520px;
-                margin: 0 auto;
-            }
-            .content-section {
-                max-width: 1520px;
-            }
-        }
-
-        @media (max-width: 1919px) {
+            
             .footer-container {
                 padding: 0 200px;
-                width: 100%;
             }
+            
             .content-section {
                 padding: 138px 32px;
                 width: 100%;
+            }
+            
+            /* 이미지 고정 크기 */
+            .section-image img {
+                width: 988px;
+                height: 444px;
+            }
+        }
+
+        /* Tablet: 744px ~ 1199px */
+        @media (min-width: 744px) and (max-width: 1199px) {
+            .footer-container {
+                padding: 0 24px;
+            }
+            
+            .content-section {
+                padding: 100px 24px;
+            }
+            
+            /* 이미지 고정 크기 (PC와 동일) */
+            .section-image img {
+                width: 988px;
+                height: 444px;
+                max-width: 100%;
+            }
+        }
+
+        /* Mobile: 375px ~ 743px */
+        @media (min-width: 375px) and (max-width: 743px) {
+            .footer-container {
+                padding: 0 16px;
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .footer-links {
+                order: -1;
+            }
+            
+            .content-section {
+                padding: 60px 32px;
+            }
+            
+            .hero-section {
+                height: 300px;
+            }
+            
+            .trust-section {
+                height: 300px;
+            }
+            
+            /* 모바일 이미지 - 좌우 여백 32px 제외하고 꽉 참 */
+            .section-image {
+                width: 100%;
+                height: auto;
+                padding: 0;
+            }
+            
+            .section-image img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+            
+            /* 푸터 반응형 */
+            .footer-container {
+                justify-content: space-between;
+            }
+            
+            .footer-text {
+                order: 1;
+            }
+            
+            .footer-social-icons {
+                order: 2;
             }
         }
     </style>

@@ -64,6 +64,9 @@
     </div>
   </main>
 
+  <!-- 유효성 검증 모듈과 모달 모듈 -->
+  <script src="validation.js"></script>
+  <script src="modal.js"></script>
   <script>
     const email = document.getElementById('email');
     const pwd = document.getElementById('password');
@@ -71,35 +74,107 @@
     const tog = document.getElementById('password-toggle');
     const form = document.getElementById('login-form');
 
-    // 버튼 활성화 함수
-    function updateBtn() {
-      const ok = email.value.trim() || pwd.value.trim();
-      if (ok) {
-        btn.classList.add('active');
-        btn.disabled = false;
-      } else {
-        btn.classList.remove('active');
-        btn.disabled = true;
-      }
+    // 이메일 유효성 검증
+    function validateEmailField() {
+        const emailValue = email.value.trim();
+        
+        if (!emailValue) {
+            showError(email, '이메일을 입력해주세요.');
+            return false;
+        }
+        
+        if (!validateEmail(emailValue)) {
+            showError(email, '잘못된 이메일 형식입니다');
+            return false;
+        }
+        
+        clearError(email);
+        return true;
     }
-    updateBtn();
-    email.addEventListener('input', updateBtn);
-    pwd.addEventListener('input', updateBtn);
+
+    // 비밀번호 유효성 검증
+    function validatePasswordField() {
+        const passwordValue = pwd.value.trim();
+        
+        if (!passwordValue) {
+            showError(pwd, '비밀번호를 입력해주세요.');
+            return false;
+        }
+        
+        if (!validatePassword(passwordValue)) {
+            showError(pwd, '비밀번호를 8자 이상 입력해주세요.');
+            return false;
+        }
+        
+        clearError(pwd);
+        return true;
+    }
+
+    // 버튼 상태 업데이트
+    function updateBtnState() {
+        const formContainer = document.querySelector('.form-container');
+        const fieldsValid = areFieldsFilled([email, pwd]) && !hasErrors(formContainer);
+        updateButtonState(btn, fieldsValid);
+    }
+
+    // 이벤트 리스너 등록
+    email.addEventListener('blur', () => {
+        validateEmailField();
+        updateBtnState();
+    });
+
+    email.addEventListener('input', () => {
+        if (email.classList.contains('error')) {
+            validateEmailField();
+        }
+        updateBtnState();
+    });
+
+    pwd.addEventListener('blur', () => {
+        validatePasswordField();
+        updateBtnState();
+    });
+
+    pwd.addEventListener('input', () => {
+        if (pwd.classList.contains('error')) {
+            validatePasswordField();
+        }
+        updateBtnState();
+    });
 
     // 비밀번호 보기/숨기기
     tog.addEventListener('click', () => {
-      const p = pwd.type === 'password';
-      pwd.type = p ? 'text' : 'password';
-      tog.textContent = p ? '🙈' : '👁';
+        const p = pwd.type === 'password';
+        pwd.type = p ? 'text' : 'password';
+        tog.textContent = p ? '🙈' : '👁';
     });
 
     // 폼 제출
     form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (!btn.classList.contains('active')) return;
-      alert('로그인 기능은 아직 구현되지 않았습니다.');
-      location.href = 'index.html';
+        e.preventDefault();
+        
+        // 모든 필드 유효성 검증
+        const emailValid = validateEmailField();
+        const passwordValid = validatePasswordField();
+        
+        if (!emailValid || !passwordValid) {
+            return;
+        }
+        
+        // 로그인 검증
+        const loginResult = validateLogin(email.value.trim(), pwd.value.trim());
+        
+        if (loginResult.success) {
+            // 로그인 성공 시 items 페이지로 이동
+            window.location.href = 'items.html';
+        } else {
+            // 로그인 실패 시 모달 표시
+            showModal(loginResult.message);
+        }
     });
+
+    // 초기 버튼 상태 설정
+    updateBtnState();
   </script>
 </body>
 </html>
