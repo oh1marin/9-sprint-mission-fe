@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>자유게시판 - 판다마켓</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="자유게시판 - 판다마켓" />
+    <meta property="og:description" content="자유롭게 소통하는 공간, 현재 준비중입니다." />
+    <meta property="og:image" content="https://mellifluous-empanada-fa5948.netlify.app/images/pandalogo.png" />
+    <meta property="og:url" content="https://mellifluous-empanada-fa5948.netlify.app/board.html" />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts & CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="global.css" />
+
+    <style>
+      /* 현재 페이지 활성화 색상만 살짝 추가 */
+      .board-link.active { color: #3B82F6; }
+    </style>
+  </head>
+  <body>
+    <!-- 헤더 -->
+    <nav class="header-nav">
+      <div class="nav-container">
+        <a href="/" class="brand-logo">
+          <img src="images/pandalogo.png" alt="판다마켓 로고" />
+        </a>
+        <div class="nav-menu-group">
+          <a href="board.html" class="board-link active">자유게시판</a>
+          <a href="market.html" class="market-link">중고마켓</a>
+        </div>
+        <div class="nav-right">
+          <a href="login.html" class="login-button">로그인</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 메인 -->
+    <main class="main-content">
+      <div class="empty-page-container">
+        <div class="empty-page-content">
+          <h1>자유게시판</h1>
+          <p>현재 준비중입니다! </p>
+          <a href="index.html" class="back-to-home-button">홈으로 가기</a>
+        </div>
+      </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-text">©codeit - 2024</div>
+        <div class="footer-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-social-icons">
+          <a href="https://facebook.com" target="_blank" class="footer-social-button" title="Facebook">
+            <img src="images/facebook.png" alt="Facebook" width="20" height="20" />
+          </a>
+          <a href="https://twitter.com" target="_blank" class="footer-social-button" title="Twitter">
+            <img src="images/tw.png" alt="Twitter" width="20" height="20" />
+          </a>
+          <a href="https://youtube.com" target="_blank" class="footer-social-button" title="YouTube">
+            <img src="images/youtube.png" alt="YouTube" width="20" height="20" />
+          </a>
+          <a href="https://instagram.com" target="_blank" class="footer-social-button" title="Instagram">
+            <img src="images/insta.png" alt="Instagram" width="20" height="20" />
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

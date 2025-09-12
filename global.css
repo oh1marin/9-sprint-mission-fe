@@ -27,12 +27,11 @@ body {
     width: 100%;
     max-width: 1120px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 0 200px;
-    gap: 80px;
 }
 
+/* 로고 */
 .brand-logo {
     width: 200px;
     height: 67px;
@@ -41,12 +40,38 @@ body {
     justify-content: center;
     cursor: pointer;
     flex-shrink: 0;
+    margin-right: 40px;
 }
 
 .brand-logo img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+/* 네비게이션 메뉴들 */
+.nav-menu-group {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-left: 20px; /* 로고 다음 간격 (추가) */
+}
+
+.board-link, .market-link {
+    color: #374151;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.board-link:hover, .market-link:hover {
+    color: #3B82F6;
+}
+
+/* 로그인 버튼을 오른쪽 끝으로 */
+.nav-right {
+    margin-left: auto;
 }
 
 .login-button {
@@ -377,12 +402,40 @@ body {
     .nav-container {
         padding: 0 24px;
     }
+    
+    .brand-logo {
+        margin-right: 20px;
+    }
+    
+    .nav-menu-group {
+        gap: 16px;
+    }
 }
 
 /* Mobile: 375px ~ 743px */  
 @media (min-width: 375px) and (max-width: 743px) {
     .nav-container {
         padding: 0 16px;
+    }
+    
+    .brand-logo {
+        width: 120px;
+        height: 40px;
+        margin-right: 16px;
+    }
+    
+    .nav-menu-group {
+        gap: 12px;
+        margin-left: 12px; /* 모바일에서도 약간 간격 */
+    }
+    
+    .board-link, .market-link {
+        font-size: 14px;
+    }
+    
+    .login-button {
+        font-size: 14px;
+        padding: 8px 16px;
     }
     
     /* 모바일에서 폼 컨테이너 반응형 */
