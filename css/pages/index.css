@@ -1,0 +1,271 @@
+/* ===== NAV: 전역 플렉스 흐름을 유지하고 index만 패딩/정렬 살짝 조정 ===== */
+.nav-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important; /* 왼쪽부터 흐르도록 */
+  padding: 0 100px !important;            /* index는 100px (원본 유지) */
+  gap: 0 !important;
+}
+.brand-logo,
+.nav-menu-group,
+.nav-right {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+}
+.nav-menu-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  margin-left: 20px !important; /* 로고 ↔ 메뉴 간격 */
+}
+.nav-right {
+  margin-left: auto !important; /* 로그인 버튼을 오른쪽 끝으로 */
+}
+.board-link,
+.market-link {
+  color: #374151 !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  transition: color 0.2s !important;
+}
+.board-link:hover,
+.market-link:hover {
+  color: #3b82f6 !important;
+}
+
+/* ===== 메인 섹션들 ===== */
+.hero-section {
+  background: #bfdbfe;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 70px; /* 헤더 높이 보정 */
+}
+.hero-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-image-link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.hero-image-link:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+.hero-image-link img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.content-section {
+  padding: 138px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+}
+.section-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+}
+.section-image {
+  width: 100%;
+  max-width: 988px;
+  height: 444px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trust-section {
+  background: #bfdbfe;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.trust-section .section-image {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.trust-section .section-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: none;
+  max-height: none;
+}
+
+/* 푸터 */
+.footer {
+  background: #111827;
+  padding: 32px 0;
+}
+.footer-container {
+  max-width: 1920px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 200px;
+}
+.footer-text,
+.footer-links a {
+  color: #9ca3af;
+  font-size: 16px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links {
+  display: flex;
+  gap: 30px;
+}
+.footer-links a:hover {
+  color: #d1d5db;
+}
+.footer-social-icons {
+  display: flex;
+  gap: 12px;
+}
+.footer-social-button {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #374151;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 20px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.footer-social-button:hover {
+  background: #4b5563;
+  color: #d1d5db;
+}
+
+/* 이미지 공통 */
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ===== 반응형 ===== */
+@media (min-width: 1200px) {
+  .hero-section,
+  .trust-section {
+    background: #bfdbfe;
+    width: 100%;
+  }
+  .footer-container {
+    padding: 0 200px;
+  }
+  .content-section {
+    padding: 138px 32px;
+    width: 100%;
+  }
+  .section-image img {
+    width: 988px;
+    height: 444px;
+  }
+}
+
+@media (min-width: 744px) and (max-width: 1199px) {
+  .nav-container {
+    padding: 0 24px !important;
+  }
+  .footer-container {
+    padding: 0 24px;
+  }
+  .content-section {
+    padding: 100px 24px;
+  }
+  .section-image img {
+    width: 988px;
+    height: 444px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 375px) and (max-width: 743px) {
+  .nav-container {
+    padding: 0 16px !important;
+  }
+  .brand-logo {
+    width: 120px !important;
+    height: 40px !important;
+  }
+  .nav-menu-group {
+    gap: 12px !important;
+    margin-left: 12px !important;
+  }
+  .board-link,
+  .market-link {
+    font-size: 14px !important;
+  }
+  .login-button {
+    font-size: 14px !important;
+    padding: 8px 16px !important;
+  }
+
+  .footer-container {
+    padding: 0 16px;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  .footer-links {
+    order: -1;
+  }
+
+  .content-section {
+    padding: 60px 32px;
+  }
+  .hero-section {
+    height: 300px;
+  }
+  .trust-section {
+    height: 300px;
+  }
+  .section-image {
+    width: 100%;
+    height: auto;
+    padding: 0;
+  }
+  .section-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .footer-text {
+    order: 1;
+  }
+  .footer-social-icons {
+    order: 2;
+  }
+}

@@ -451,3 +451,9 @@ body {
         height: auto;
     }
 }
+
+/* ===== 피드백 반영: Active 상태 공통 클래스 ===== */
+.board-link.active,
+.market-link.active {
+    color: #3B82F6;
+}
