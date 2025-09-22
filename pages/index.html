@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>판다마켓</title>
+
+    <!-- Open Graph 메타 태그 -->
+    <meta property="og:title" content="판다마켓" />
+    <meta property="og:description" content="일상에서 모든 물건을 거래해보세요" />
+    <meta property="og:image" content="https://mellifluous-empanada-fa5948.netlify.app/images/pandalogo.png" />
+    <meta property="og:url" content="https://mellifluous-empanada-fa5948.netlify.app/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts & CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/global.css" />
+
+    <style>
+      /* ===== NAV: 전역 플렉스 흐름을 유지하고 index만 패딩/정렬 살짝 조정 ===== */
+      .nav-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important; /* 왼쪽부터 흐르도록 */
+        padding: 0 100px !important;            /* index는 100px (원본 유지) */
+        gap: 0 !important;
+      }
+      .brand-logo,
+      .nav-menu-group,
+      .nav-right {
+        position: static !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+      }
+      .nav-menu-group {
+        display: flex !important;
+        align-items: center !important;
+        gap: 24px !important;
+        margin-left: 20px !important; /* 로고 ↔ 메뉴 간격 */
+      }
+      .nav-right {
+        margin-left: auto !important; /* 로그인 버튼을 오른쪽 끝으로 */
+      }
+      .board-link,
+      .market-link {
+        color: #374151 !important;
+        text-decoration: none !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        transition: color 0.2s !important;
+      }
+      .board-link:hover,
+      .market-link:hover {
+        color: #3b82f6 !important;
+      }
+
+      /* ===== 메인 섹션들 ===== */
+      .hero-section {
+        background: #bfdbfe;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        margin-top: 70px; /* 헤더 높이 보정 */
+      }
+      .hero-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hero-image-link {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s, opacity 0.2s;
+      }
+      .hero-image-link:hover {
+        transform: scale(1.02);
+        opacity: 0.9;
+      }
+      .hero-image-link img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      .content-section {
+        padding: 138px 0;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: #ffffff;
+      }
+      .section-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 32px;
+      }
+      .section-image {
+        width: 100%;
+        max-width: 988px;
+        height: 444px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .trust-section {
+        background: #bfdbfe;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .trust-section .section-image {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .trust-section .section-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        max-width: none;
+        max-height: none;
+      }
+
+      /* 푸터 */
+      .footer {
+        background: #111827;
+        padding: 32px 0;
+      }
+      .footer-container {
+        max-width: 1920px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 200px;
+      }
+      .footer-text,
+      .footer-links a {
+        color: #9ca3af;
+        font-size: 16px;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .footer-links {
+        display: flex;
+        gap: 30px;
+      }
+      .footer-links a:hover {
+        color: #d1d5db;
+      }
+      .footer-social-icons {
+        display: flex;
+        gap: 12px;
+      }
+      .footer-social-button {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #374151;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+        text-decoration: none;
+        font-size: 20px;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      .footer-social-button:hover {
+        background: #4b5563;
+        color: #d1d5db;
+      }
+
+      /* 이미지 공통 */
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      /* ===== 반응형 ===== */
+      @media (min-width: 1200px) {
+        .hero-section,
+        .trust-section {
+          background: #bfdbfe;
+          width: 100%;
+        }
+        .footer-container {
+          padding: 0 200px;
+        }
+        .content-section {
+          padding: 138px 32px;
+          width: 100%;
+        }
+        .section-image img {
+          width: 988px;
+          height: 444px;
+        }
+      }
+
+      @media (min-width: 744px) and (max-width: 1199px) {
+        .nav-container {
+          padding: 0 24px !important;
+        }
+        .footer-container {
+          padding: 0 24px;
+        }
+        .content-section {
+          padding: 100px 24px;
+        }
+        .section-image img {
+          width: 988px;
+          height: 444px;
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 375px) and (max-width: 743px) {
+        .nav-container {
+          padding: 0 16px !important;
+        }
+        .brand-logo {
+          width: 120px !important;
+          height: 40px !important;
+        }
+        .nav-menu-group {
+          gap: 12px !important;
+          margin-left: 12px !important;
+        }
+        .board-link,
+        .market-link {
+          font-size: 14px !important;
+        }
+        .login-button {
+          font-size: 14px !important;
+          padding: 8px 16px !important;
+        }
+
+        .footer-container {
+          padding: 0 16px;
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
+        .footer-links {
+          order: -1;
+        }
+
+        .content-section {
+          padding: 60px 32px;
+        }
+        .hero-section {
+          height: 300px;
+        }
+        .trust-section {
+          height: 300px;
+        }
+        .section-image {
+          width: 100%;
+          height: auto;
+          padding: 0;
+        }
+        .section-image img {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+        }
+        .footer-text {
+          order: 1;
+        }
+        .footer-social-icons {
+          order: 2;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 상단 메뉴 -->
+    <nav class="header-nav">
+      <div class="nav-container">
+        <a href="index.html" class="brand-logo">
+          <img src="../images/pandalogo.png" alt="판다마켓 로고" />
+        </a>
+
+        <div class="nav-menu-group">
+          <a href="board.html" class="board-link">자유게시판</a>
+          <a href="market.html" class="market-link">중고마켓</a>
+        </div>
+
+        <div class="nav-right">
+          <a href="login.html" class="login-button">로그인</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 메인 섹션 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <a href="market.html" class="hero-image-link" aria-label="중고마켓으로 이동">
+          <img src="../images/panda1.png" alt="판다마켓 메인 이미지" />
+        </a>
+      </div>
+    </section>
+
+    <!-- 상품 섹션 -->
+    <section class="content-section">
+      <div class="section-inner">
+        <div class="section-image">
+          <img src="../images/panda2.png" alt="상품 등록 이미지" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 검색 섹션 -->
+    <section class="content-section">
+      <div class="section-inner">
+        <div class="section-image">
+          <img src="../images/panda3.png" alt="핫한 상품 이미지" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 거래 섹션 -->
+    <section class="content-section">
+      <div class="section-inner">
+        <div class="section-image">
+          <img src="../images/panda4.png" alt="판매 등록 이미지" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 안전 섹션 -->
+    <section class="trust-section">
+      <div class="hero-content">
+        <div class="section-image">
+          <img src="../images/panda5.png" alt="안전거래 이미지" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-text">©codeit - 2024</div>
+        <div class="footer-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-social-icons">
+          <a href="https://facebook.com" target="_blank" class="footer-social-button" title="Facebook">
+            <img src="../images/facebook.png" alt="Facebook" width="20" height="20" />
+          </a>
+          <a href="https://twitter.com" target="_blank" class="footer-social-button" title="Twitter">
+            <img src="../images/tw.png" alt="Twitter" width="20" height="20" />
+          </a>
+          <a href="https://youtube.com" target="_blank" class="footer-social-button" title="YouTube">
+            <img src="../images/youtube.png" alt="YouTube" width="20" height="20" />
+          </a>
+          <a href="https://instagram.com" target="_blank" class="footer-social-button" title="Instagram">
+            <img src="../images/insta.png" alt="Instagram" width="20" height="20" />
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // 부드러운 스크롤 (해시 링크가 있을 경우)
+      document.addEventListener("DOMContentLoaded", function () {
+        const links = document.querySelectorAll('a[href^="#"]');
+        links.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute("href"));
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -5,38 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>중고마켓 - 판다마켓</title>
 
-    <!-- Open Graph 메타 태그 -->
+    <!-- 카카오톡, 페이스북 등에 공유할 때 보이는 정보 -->
     <meta property="og:title" content="중고마켓 - 판다마켓" />
     <meta property="og:description" content="다양한 중고 상품을 거래해보세요" />
     <meta property="og:image" content="https://mellifluous-empanada-fa5948.netlify.app/images/pandalogo.png" />
     <meta property="og:url" content="https://mellifluous-empanada-fa5948.netlify.app/market.html" />
     <meta property="og:type" content="website" />
 
-    <!-- 폰트 & CSS -->
+    <!-- 글꼴과 스타일시트 불러오기 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/global.css" />
 
     <style>
-      /* =========================
-         NAV: 전역 레이아웃을 존중하면서 페이지에서 살짝만 오버라이드
-         - 로고 → 메뉴(자유게시판/중고마켓) 왼쪽
-         - 로그인은 오른쪽 끝
-      ========================== */
+      /* 상단 메뉴바 스타일 
+         로고 → 메뉴(자유게시판/중고마켓) → 로그인 순서로 배치 */
       .nav-container {
         display: flex !important;
         align-items: center !important;
-        justify-content: flex-start !important; /* 왼쪽 붙이기 */
+        justify-content: flex-start !important; /* 왼쪽부터 시작 */
         padding: 0 200px !important;
         gap: 0 !important;
       }
 
-      /* 절대 위치 제거 (전부 자연스러운 플렉스 흐름) */
+      /* 위치 고정 안함 (자연스럽게 흐름에 따라 배치) */
       .brand-logo,
       .nav-menu-group,
       .nav-right {
@@ -47,20 +44,20 @@
         z-index: auto !important;
       }
 
-      /* 로고 다음에 메뉴가 자연스럽게 이어지도록 여백만 */
+      /* 메뉴(자유게시판/중고마켓) 부분 */
       .nav-menu-group {
         display: flex !important;
         align-items: center !important;
         gap: 24px !important;
-        margin-left: 20px !important; /* 로고 ↔ 메뉴 간격 */
+        margin-left: 20px !important; /* 로고와 간격 */
       }
 
-      /* 로그인은 오른쪽 끝으로 */
+      /* 로그인 버튼을 맨 오른쪽으로 */
       .nav-right {
         margin-left: auto !important;
       }
 
-      /* 링크/활성 스타일 */
+      /* 메뉴 링크 스타일 */
       .board-link,
       .market-link {
         color: #374151 !important;
@@ -77,9 +74,7 @@
         color: #3b82f6 !important;
       }
 
-      /* =========================
-         메인 콘텐츠
-      ========================== */
+      /* 본문 영역 */
       .main-content {
         margin-top: 70px;
         padding: 40px 0;
@@ -100,7 +95,7 @@
         text-align: left;
       }
 
-      /* 베스트 상품 섹션 */
+      /* 베스트 상품 영역 */
       .best-products-section {
         margin-bottom: 80px;
       }
@@ -111,7 +106,7 @@
         margin-bottom: 40px;
       }
 
-      /* 전체 상품 섹션 */
+      /* 전체 상품 영역 */
       .all-products-section .products-header {
         display: flex;
         justify-content: space-between;
@@ -127,6 +122,7 @@
         flex-wrap: wrap;
       }
 
+      /* 검색창 */
       .search-container {
         display: flex;
         align-items: center;
@@ -159,6 +155,7 @@
         background: #2563eb;
       }
 
+      /* 정렬 선택 드롭다운 */
       .sort-select {
         padding: 10px 14px;
         border: 1px solid #e5e7eb;
@@ -176,7 +173,7 @@
         margin-bottom: 40px;
       }
 
-      /* 상품 카드 */
+      /* 상품 카드 디자인 */
       .product-card {
         background: white;
         border: 1px solid #e5e7eb;
@@ -191,6 +188,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
+      /* 상품 이미지 */
       .product-image {
         width: 100%;
         height: 200px;
@@ -207,6 +205,7 @@
         transform: scale(1.05);
       }
 
+      /* 상품 정보 */
       .product-info {
         padding: 16px;
       }
@@ -243,7 +242,7 @@
         color: #9ca3af;
       }
 
-      /* 페이지네이션 */
+      /* 페이지 번호 버튼들 */
       .pagination {
         display: flex;
         justify-content: center;
@@ -277,7 +276,7 @@
         background: #f9fafb;
       }
 
-      /* 로딩 및 상태 메시지 */
+      /* 로딩 중, 에러, 상품 없음 메시지 */
       .loading,
       .error,
       .no-products {
@@ -298,7 +297,7 @@
         color: #9ca3af;
       }
 
-      /* 푸터 */
+      /* 하단 푸터 */
       .footer {
         background: #111827;
         padding: 32px 0;
@@ -348,9 +347,8 @@
         color: #d1d5db;
       }
 
-      /* =========================
-         반응형
-      ========================== */
+      /*  반응형 디자인 */
+      /* PC 화면 (1200px 이상) */
       @media (min-width: 1200px) {
         .best-products-grid {
           grid-template-columns: repeat(4, 1fr);
@@ -360,6 +358,7 @@
         }
       }
 
+      /* 태블릿 화면 (744px ~ 1199px) */
       @media (min-width: 744px) and (max-width: 1199px) {
         .nav-container {
           padding: 0 24px !important;
@@ -397,6 +396,7 @@
         }
       }
 
+      /* 모바일 화면 (743px 이하) */
       @media (max-width: 743px) {
         .nav-container {
           padding: 0 16px !important;
@@ -439,7 +439,7 @@
           min-width: auto;
         }
         .search-input {
-          font-size: 16px; /* iOS 확대 방지 */
+          font-size: 16px; 
         }
         .sort-select {
           width: 100%;
@@ -495,11 +495,11 @@
   </head>
 
   <body>
-    <!-- 상단 네비게이션 -->
+    <!-- 상단 메뉴바 -->
     <nav class="header-nav">
       <div class="nav-container">
-        <a href="/" class="brand-logo">
-          <img src="images/pandalogo.png" alt="판다마켓 로고" />
+        <a href="index.html" class="brand-logo">
+          <img src="../images/pandalogo.png" alt="판다마켓 로고" />
         </a>
 
         <div class="nav-menu-group">
@@ -513,9 +513,9 @@
       </div>
     </nav>
 
-    <!-- 메인 콘텐츠 -->
+    <!-- 본문 내용 -->
     <main class="main-content">
-      <!-- 베스트 상품 섹션 -->
+      <!-- 베스트 상품 영역 -->
       <section class="best-products-section">
         <div class="container">
           <h2 class="section-title">베스트 상품</h2>
@@ -525,13 +525,13 @@
         </div>
       </section>
 
-      <!-- 전체 상품 섹션 -->
+      <!-- 전체 상품 영역 -->
       <section class="all-products-section">
         <div class="container">
           <div class="products-header">
             <h2 class="section-title">판매 중인 상품</h2>
 
-            <!-- 검색 및 정렬 컨트롤 -->
+            <!-- 검색창과 정렬 드롭다운 -->
             <div class="products-controls">
               <div class="search-container">
                 <input
@@ -550,18 +550,18 @@
             </div>
           </div>
 
-          <!-- 상품 목록 -->
+          <!-- 상품 목록이 표시될 영역 -->
           <div id="all-products-container">
             <div class="loading">상품을 불러오고 있습니다...</div>
           </div>
 
-          <!-- 페이지네이션 -->
+          <!-- 페이지 번호 버튼들 -->
           <div id="pagination-container"></div>
         </div>
       </section>
     </main>
 
-    <!-- 푸터 -->
+    <!-- 하단 푸터 -->
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-text">©codeit - 2024</div>
@@ -571,35 +571,35 @@
         </div>
         <div class="footer-social-icons">
           <a href="https://facebook.com" target="_blank" class="footer-social-button" title="Facebook">
-            <img src="images/facebook.png" alt="Facebook" width="20" height="20" />
+            <img src="../images/facebook.png" alt="Facebook" width="20" height="20" />
           </a>
           <a href="https://twitter.com" target="_blank" class="footer-social-button" title="Twitter">
-            <img src="images/tw.png" alt="Twitter" width="20" height="20" />
+            <img src="../images/tw.png" alt="Twitter" width="20" height="20" />
           </a>
           <a href="https://youtube.com" target="_blank" class="footer-social-button" title="YouTube">
-            <img src="images/youtube.png" alt="YouTube" width="20" height="20" />
+            <img src="../images/youtube.png" alt="YouTube" width="20" height="20" />
           </a>
           <a href="https://instagram.com" target="_blank" class="footer-social-button" title="Instagram">
-            <img src="images/insta.png" alt="Instagram" width="20" height="20" />
+            <img src="../images/insta.png" alt="Instagram" width="20" height="20" />
           </a>
         </div>
       </div>
     </footer>
 
     <script>
-      // 커스텀 훅과 유사한 기능을 제공하는 클래스들
+      // 상품 관리 클래스
       class ProductsManager {
         constructor() {
-          this.currentPage = 1;
-          this.pageSize = this.getPageSize();
-          this.orderBy = "recent";
-          this.keyword = "";
-          this.products = [];
-          this.totalCount = 0;
-          this.loading = false;
-          this.error = null;
+          this.currentPage = 1;              // 현재 페이지 번호
+          this.pageSize = this.getPageSize(); // 한 페이지에 보여줄 상품 개수
+          this.orderBy = "recent";            // 정렬 방식 (최신순/좋아요순)
+          this.keyword = "";                  // 검색어
+          this.products = [];                 // 불러온 상품 목록
+          this.totalCount = 0;                // 전체 상품 개수
+          this.loading = false;               // 로딩 중인지 여부
+          this.error = null;                  // 에러 메시지
 
-          // 반응형 대응
+          // 화면 크기가 바뀌면 페이지 크기도 변경
           window.addEventListener("resize", () => {
             const newPageSize = this.getPageSize();
             if (newPageSize !== this.pageSize) {
@@ -610,19 +610,22 @@
           });
         }
 
+        // 화면 크기에 따라 한 페이지에 보여줄 상품 개수 계산
         getPageSize() {
           const width = window.innerWidth;
-          if (width >= 1200) return 10; // 5열 x 2행
-          if (width >= 744) return 6; // 3열 x 2행
-          return 4; // 2열 x 2행
+          if (width >= 1200) return 10; // PC: 5열 x 2행
+          if (width >= 744) return 6;   // 태블릿: 3열 x 2행
+          return 4;                     // 모바일: 2열 x 2행
         }
 
+        // 서버에서 상품 목록 가져오기
         async loadProducts() {
           this.loading = true;
           this.error = null;
           this.updateProductsUI();
 
           try {
+            // API 요청 URL 만들기
             const params = new URLSearchParams({
               page: this.currentPage.toString(),
               pageSize: this.pageSize.toString(),
@@ -633,6 +636,7 @@
               params.append("keyword", this.keyword.trim());
             }
 
+            // 서버에서 데이터 받아오기
             const response = await fetch(
               `https://panda-market-api.vercel.app/products?${params}`
             );
@@ -652,37 +656,45 @@
           }
         }
 
+        // 상품 목록 화면 업데이트
         updateProductsUI() {
           const container = document.getElementById("all-products-container");
 
+          // 로딩 중일 때
           if (this.loading) {
             container.innerHTML = '<div class="loading">상품을 불러오고 있습니다...</div>';
             return;
           }
+          // 에러가 발생했을 때
           if (this.error) {
             container.innerHTML = `<div class="error">오류가 발생했습니다: ${this.error}</div>`;
             return;
           }
+          // 상품이 없을 때
           if (this.products.length === 0) {
             container.innerHTML = '<div class="no-products">등록된 상품이 없습니다.</div>';
             return;
           }
 
+          // 상품 카드 HTML 만들기
           const productsHTML = this.products
             .map((product) => this.createProductCard(product))
             .join("");
           container.innerHTML = `<div class="products-grid">${productsHTML}</div>`;
         }
 
+        // 페이지 번호 버튼 업데이트
         updatePaginationUI() {
           const container = document.getElementById("pagination-container");
           const totalPages = Math.ceil(this.totalCount / this.pageSize);
 
+          // 페이지가 1개뿐이면 버튼 숨기기
           if (totalPages <= 1) {
             container.innerHTML = "";
             return;
           }
 
+          // 보여줄 페이지 번호 계산 (최대 5개)
           const maxVisible = 5;
           let start = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
           let end = Math.min(totalPages, start + maxVisible - 1);
@@ -693,6 +705,7 @@
 
           const visiblePages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
+          // 페이지 번호 버튼 HTML 만들기
           const paginationHTML = `
             <div class="pagination">
               <button class="pagination-btn" onclick="productsManager.goToPage(${this.currentPage - 1})" ${
@@ -723,6 +736,7 @@
           container.innerHTML = paginationHTML;
         }
 
+        // 상품 카드 HTML 만들기
         createProductCard(product) {
           const imageUrl =
             product.images && product.images.length > 0
@@ -746,11 +760,13 @@
           `;
         }
 
+        // 가격을 한국 원화 형식으로 변환 
         formatPrice(price) {
           if (!price) return "0원";
           return new Intl.NumberFormat("ko-KR").format(price) + "원";
         }
 
+        // 날짜를 상대적 시간으로 변환 
         formatDate(dateString) {
           if (!dateString) return "";
           const date = new Date(dateString);
@@ -765,17 +781,20 @@
           return `${days}일 전`;
         }
 
+        // 특정 페이지로 이동
         goToPage(page) {
           this.currentPage = page;
           this.loadProducts();
         }
 
+        // 검색 실행
         search(keyword) {
           this.keyword = keyword;
           this.currentPage = 1;
           this.loadProducts();
         }
 
+        // 정렬 방식 변경
         sort(orderBy) {
           this.orderBy = orderBy;
           this.currentPage = 1;
@@ -783,12 +802,17 @@
         }
       }
 
+      // ===========================
+      // 베스트 상품 관리 클래스
+      // - 좋아요가 많은 상품 4개 표시
+      // ===========================
       class BestProductsManager {
         constructor() {
           this.bestProducts = [];
           this.loading = false;
         }
 
+        // 베스트 상품 4개 가져오기
         async loadBestProducts() {
           this.loading = true;
           this.updateBestProductsUI();
@@ -810,6 +834,7 @@
           }
         }
 
+        // 베스트 상품 화면 업데이트
         updateBestProductsUI() {
           const container = document.getElementById("best-products-container");
 
@@ -825,16 +850,21 @@
         }
       }
 
-      // 전역 인스턴스
+      // ===========================
+      // 전역 변수로 관리 객체 생성
+      // ===========================
       const productsManager = new ProductsManager();
       const bestProductsManager = new BestProductsManager();
 
-      // 초기화
+      // ===========================
+      // 페이지 로드 시 초기 설정
+      // ===========================
       document.addEventListener("DOMContentLoaded", function () {
+        // 베스트 상품과 전체 상품 불러오기
         bestProductsManager.loadBestProducts();
         productsManager.loadProducts();
 
-        // 검색 기능
+        // 검색 기능 설정
         const searchInput = document.getElementById("search-input");
         const searchButton = document.getElementById("search-button");
         const handleSearch = () => productsManager.search(searchInput.value);
@@ -843,7 +873,7 @@
           if (e.key === "Enter") handleSearch();
         });
 
-        // 정렬 기능
+        // 정렬 기능 설정
         const sortSelect = document.getElementById("sort-select");
         sortSelect.addEventListener("change", (e) => {
           productsManager.sort(e.target.value);
