@@ -52,7 +52,7 @@ body {
 /* 네비게이션 메뉴들 */
 .nav-menu-group {
     display: flex;
-    gap: 24px;
+    gap: 60px;
     align-items: center;
     margin-left: 20px; /* 로고 다음 간격 (추가) */
 }
