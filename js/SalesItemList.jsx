@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getProductList } from './ProductService';
+import { useResponsive } from '../hooks/useResponsive';
 
 const SalesItemList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [orderBy, setOrderBy] = useState('recent');
   const [keyword, setKeyword] = useState('');
   const [products, setProducts] = useState([]);
@@ -11,6 +11,9 @@ const SalesItemList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState('');
+
+  // 커스텀 훅 사용 - 반응형 pageSize 자동 관리
+  const pageSize = useResponsive('products');
 
   // 상품 목록 로드
   const loadProducts = useCallback(async () => {
@@ -30,36 +33,62 @@ const SalesItemList = () => {
     }
   }, [currentPage, pageSize, keyword, orderBy]);
 
+  // pageSize 변경시 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [pageSize]);
+
   useEffect(() => {
     loadProducts();
   }, [loadProducts]);
 
-  // ItemCard 컴포넌트를 SalesItemList 안에 포함
-  const ItemCard = ({ product }) => {
+  // 가격 포맷 함수
+  const formatPrice = (price) => {
+    if (!price) return '0원';
+    return new Intl.NumberFormat('ko-KR').format(price) + '원';
+  };
+
+  // 날짜 포맷 함수
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+
+    if (hours < 24) {
+      return hours < 1 ? '방금 전' : `${hours}시간 전`;
+    }
+    const days = Math.floor(hours / 24);
+    return `${days}일 전`;
+  };
+
+  // 상품 카드 생성
+  const createProductCard = (product) => {
     const imageUrl =
       product.images && product.images.length > 0
         ? product.images[0]
         : 'https://via.placeholder.com/200x200?text=No+Image';
 
     return (
-      <div className="product-card">
+      <div key={product.id} className="product-card">
         <div className="product-image">
           <img src={imageUrl} alt={product.name || '상품 이미지'} />
         </div>
         <div className="product-info">
           <h3 className="product-name">{product.name || '제목 없음'}</h3>
-          <p className="product-price">{product.price}</p>
+          <p className="product-price">{formatPrice(product.price)}</p>
           <div className="product-meta">
             <span className="product-favorite">♥ {product.favoriteCount || 0}</span>
-            <span className="product-date">{product.createdAt}</span>
+            <span className="product-date">{formatDate(product.createdAt)}</span>
           </div>
         </div>
       </div>
     );
   };
 
-  // 페이지네이션 컴포넌트
-  const Pagination = () => {
+  // 페이지네이션
+  const renderPagination = () => {
     const totalPages = Math.ceil(totalCount / pageSize);
 
     if (totalPages <= 1) return null;
@@ -78,7 +107,7 @@ const SalesItemList = () => {
       <div className="pagination">
         <button
           className="pagination-btn"
-          onClick={() => handlePageChange(currentPage - 1)}
+          onClick={() => goToPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
           이전
@@ -87,14 +116,14 @@ const SalesItemList = () => {
           <button
             key={page}
             className={`pagination-btn ${page === currentPage ? 'active' : ''}`}
-            onClick={() => handlePageChange(page)}
+            onClick={() => goToPage(page)}
           >
             {page}
           </button>
         ))}
         <button
           className="pagination-btn"
-          onClick={() => handlePageChange(currentPage + 1)}
+          onClick={() => goToPage(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           다음
@@ -104,7 +133,7 @@ const SalesItemList = () => {
   };
 
   // 이벤트 핸들러들
-  const handlePageChange = (page) => {
+  const goToPage = (page) => {
     setCurrentPage(page);
   };
 
@@ -117,6 +146,11 @@ const SalesItemList = () => {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const handleSortChange = (e) => {
+    setOrderBy(e.target.value);
+    setCurrentPage(1);
   };
 
   // 상품 목록 렌더링
@@ -135,9 +169,7 @@ const SalesItemList = () => {
 
     return (
       <div className="products-grid">
-        {products.map((product) => (
-          <ItemCard key={product.id} product={product} />
-        ))}
+        {products.map((product) => createProductCard(product))}
       </div>
     );
   };
@@ -151,6 +183,7 @@ const SalesItemList = () => {
           <div className="products-controls">
             <div className="search-container">
               <input
+                id="search-input"
                 className="search-input"
                 type="text"
                 placeholder="검색할 상품을 입력해주세요"
@@ -158,19 +191,30 @@ const SalesItemList = () => {
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleSearchKeyPress}
               />
-              <button className="search-button" onClick={handleSearch}>
+              <button id="search-button" className="search-button" onClick={handleSearch}>
                 🔍
               </button>
             </div>
+
+            <select
+              id="sort-select"
+              className="sort-select"
+              value={orderBy}
+              onChange={handleSortChange}
+              aria-label="정렬 방식 선택"
+            >
+              <option value="recent">최신 순</option>
+              <option value="favorite">좋아요 순</option>
+            </select>
           </div>
         </div>
 
-        <div>
+        <div id="all-products-container">
           {renderProducts()}
         </div>
 
-        <div>
-          <Pagination />
+        <div id="pagination-container">
+          {renderPagination()}
         </div>
       </div>
     </section>

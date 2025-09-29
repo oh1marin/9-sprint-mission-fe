@@ -1,12 +1,13 @@
 const BASE_URL = 'https://panda-market-api-crud.vercel.app';
 
-// async/await으로 상품 목록 조회
-export async function getProductList(page = 1, pageSize = 10, keyword = '') {
+// async/await으로 상품 목록 조회 (orderBy 파라미터 추가)
+export async function getProductList(page = 1, pageSize = 10, keyword = '', orderBy = 'recent') {
   try {
     const params = new URLSearchParams();
     if (page) params.append('page', page);
     if (pageSize) params.append('pageSize', pageSize);
     if (keyword) params.append('keyword', keyword);
+    if (orderBy) params.append('orderBy', orderBy);
     
     const url = `${BASE_URL}/products?${params.toString()}`;
     const response = await fetch(url);
