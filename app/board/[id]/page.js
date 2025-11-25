@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter, useParams } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import Header from "@/components/Header";
 
 export default function PostDetailPage() {
   const router = useRouter();
@@ -12,9 +13,9 @@ export default function PostDetailPage() {
 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [commentInput, setCommentInput] = useState('');
+  const [commentInput, setCommentInput] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editingContent, setEditingContent] = useState('');
+  const [editingContent, setEditingContent] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,13 +27,15 @@ export default function PostDetailPage() {
 
   const fetchPostDetail = async () => {
     try {
-      const response = await fetch(`https://panda-market-api.vercel.app/articles/${postId}`);
+      const response = await fetch(
+        `https://panda-market-api.vercel.app/articles/${postId}`
+      );
       if (response.ok) {
         const data = await response.json();
         setPost(data);
       }
     } catch (error) {
-      console.error('게시글 로드 실패:', error);
+      console.error("게시글 로드 실패:", error);
     } finally {
       setLoading(false);
     }
@@ -40,13 +43,15 @@ export default function PostDetailPage() {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`https://panda-market-api.vercel.app/articles/${postId}/comments`);
+      const response = await fetch(
+        `https://panda-market-api.vercel.app/articles/${postId}/comments`
+      );
       if (response.ok) {
         const data = await response.json();
         setComments(data.list || []);
       }
     } catch (error) {
-      console.error('댓글 로드 실패:', error);
+      console.error("댓글 로드 실패:", error);
     }
   };
 
@@ -54,18 +59,21 @@ export default function PostDetailPage() {
     if (!commentInput.trim()) return;
 
     try {
-      const response = await fetch(`https://panda-market-api.vercel.app/articles/${postId}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: commentInput.trim() }),
-      });
+      const response = await fetch(
+        `https://panda-market-api.vercel.app/articles/${postId}/comments`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: commentInput.trim() }),
+        }
+      );
 
       if (response.ok) {
-        setCommentInput('');
+        setCommentInput("");
         fetchComments();
       }
     } catch (error) {
-      console.error('댓글 등록 실패:', error);
+      console.error("댓글 등록 실패:", error);
     }
   };
 
@@ -73,80 +81,84 @@ export default function PostDetailPage() {
     if (!editingContent.trim()) return;
 
     try {
-      const response = await fetch(`https://panda-market-api.vercel.app/comments/${commentId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: editingContent.trim() }),
-      });
+      const response = await fetch(
+        `https://panda-market-api.vercel.app/comments/${commentId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: editingContent.trim() }),
+        }
+      );
 
       if (response.ok) {
         setEditingCommentId(null);
-        setEditingContent('');
+        setEditingContent("");
         fetchComments();
       }
     } catch (error) {
-      console.error('댓글 수정 실패:', error);
+      console.error("댓글 수정 실패:", error);
     }
   };
 
   const handleCommentDelete = async (commentId) => {
-    if (!confirm('댓글을 삭제하시겠습니까?')) return;
+    if (!confirm("댓글을 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch(`https://panda-market-api.vercel.app/comments/${commentId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `https://panda-market-api.vercel.app/comments/${commentId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         fetchComments();
       }
     } catch (error) {
-      console.error('댓글 삭제 실패:', error);
+      console.error("댓글 삭제 실패:", error);
     }
   };
 
   const handlePostDelete = async () => {
-    if (!confirm('게시글을 삭제하시겠습니까?')) return;
+    if (!confirm("게시글을 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch(`https://panda-market-api.vercel.app/articles/${postId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `https://panda-market-api.vercel.app/articles/${postId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
-        alert('게시글이 삭제되었습니다.');
-        router.push('/board');
+        alert("게시글이 삭제되었습니다.");
+        router.push("/board");
       }
     } catch (error) {
-      console.error('게시글 삭제 실패:', error);
+      console.error("게시글 삭제 실패:", error);
     }
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return '';
+    if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '. ');
+    return date
+      .toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/\. /g, ". ");
   };
 
   if (loading) {
     return (
       <div className="page-container">
-        <header className="header-nav">
-          <div className="nav-container">
-            <Link href="/" className="brand-logo">
-              <Image src="/images/pandalogo.png" alt="" width={200} height={67} />
-            </Link>
-            <nav className="nav-menu-group">
-              <Link href="/board" className="board-link">자유게시판</Link>
-              <Link href="/market" className="market-link">중고마켓</Link>
-            </nav>
-            <div className="nav-right">
-              <Link href="/login" className="login-button">로그인</Link>
-            </div>
-          </div>
-        </header>
+        <Header />
         <main className="main-content">
-          <div className="text-center py-20 text-[#6b7280]">게시글을 불러오는 중입니다...</div>
+          <div className="text-center py-20 text-[#6b7280]">
+            게시글을 불러오는 중입니다...
+          </div>
         </main>
       </div>
     );
@@ -155,22 +167,11 @@ export default function PostDetailPage() {
   if (!post) {
     return (
       <div className="page-container">
-        <header className="header-nav">
-          <div className="nav-container">
-            <Link href="/" className="brand-logo">
-              <Image src="/images/pandalogo.png" alt="" width={200} height={67} />
-            </Link>
-            <nav className="nav-menu-group">
-              <Link href="/board" className="board-link">자유게시판</Link>
-              <Link href="/market" className="market-link">중고마켓</Link>
-            </nav>
-            <div className="nav-right">
-              <Link href="/login" className="login-button">로그인</Link>
-            </div>
-          </div>
-        </header>
+        <Header />
         <main className="main-content">
-          <div className="text-center py-20 text-[#6b7280]">게시글을 찾을 수 없습니다.</div>
+          <div className="text-center py-20 text-[#6b7280]">
+            게시글을 찾을 수 없습니다.
+          </div>
         </main>
       </div>
     );
@@ -178,59 +179,52 @@ export default function PostDetailPage() {
 
   return (
     <div className="page-container">
-      <header className="header-nav">
-        <div className="nav-container">
-          <Link href="/" className="brand-logo">
-            <Image src="/images/pandalogo.png" alt="" width={200} height={67} />
-          </Link>
-
-          <nav className="nav-menu-group">
-            <Link href="/board" className="board-link">
-              자유게시판
-            </Link>
-            <Link href="/market" className="market-link">
-              중고마켓
-            </Link>
-          </nav>
-
-          <div className="nav-right">
-            <Link href="/login" className="login-button">
-              로그인
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="main-content">
         <div className="center-container">
-          <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto', padding: '0 20px' }}>
-            <Link href="/board" className="inline-block mb-6 text-[#6b7280] hover:text-[#111827]">
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "800px",
+              margin: "0 auto",
+              padding: "0 20px",
+            }}
+          >
+            <Link
+              href="/board"
+              className="inline-block mb-6 text-[#6b7280] hover:text-[#111827]"
+            >
               ← 목록으로
             </Link>
 
             <article className="bg-white rounded-lg border border-[#e5e7eb] p-6 mb-6">
-              <h1 className="text-[28px] font-bold text-[#111827] mb-4">{post.title}</h1>
-              
+              <h1 className="text-[28px] font-bold text-[#111827] mb-4">
+                {post.title}
+              </h1>
+
               {post.image && (
                 <div className="mb-6 w-full max-w-2xl">
-                  <img 
-                    src={post.image} 
+                  <img
+                    src={post.image}
                     alt={post.title}
                     className="w-full rounded-lg object-cover"
                     onError={(e) => {
-                      e.target.style.display = 'none';
+                      e.target.style.display = "none";
                     }}
                   />
                 </div>
               )}
-              
+
               <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#e5e7eb]">
                 <div className="flex items-center gap-3 text-[14px] text-[#6b7280]">
                   <span>판다마켓</span>
                   <span>{formatDate(post.createdAt)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[14px] text-[#6b7280]">🖤 {post.likeCount || 0}</span>
+                  <span className="text-[14px] text-[#6b7280]">
+                    🖤 {post.likeCount || 0}
+                  </span>
                   <button
                     onClick={handlePostDelete}
                     className="text-[14px] text-[#dc2626] hover:text-[#991b1b] font-medium"
@@ -270,7 +264,10 @@ export default function PostDetailPage() {
 
               <div className="space-y-4">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="border-t border-[#e5e7eb] pt-4">
+                  <div
+                    key={comment.id}
+                    className="border-t border-[#e5e7eb] pt-4"
+                  >
                     {editingCommentId === comment.id ? (
                       <div>
                         <textarea
@@ -282,7 +279,7 @@ export default function PostDetailPage() {
                           <button
                             onClick={() => {
                               setEditingCommentId(null);
-                              setEditingContent('');
+                              setEditingContent("");
                             }}
                             className="rounded-lg border border-[#d1d5db] px-4 py-1.5 text-[14px] text-[#6b7280] hover:bg-[#f9fafb]"
                           >
@@ -300,8 +297,12 @@ export default function PostDetailPage() {
                       <div>
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2 text-[14px]">
-                            <span className="font-medium text-[#111827]">판다마켓</span>
-                            <span className="text-[#9ca3af]">{formatDate(comment.createdAt)}</span>
+                            <span className="font-medium text-[#111827]">
+                              판다마켓
+                            </span>
+                            <span className="text-[#9ca3af]">
+                              {formatDate(comment.createdAt)}
+                            </span>
                           </div>
                           <div className="flex items-center gap-2">
                             <button
@@ -321,7 +322,9 @@ export default function PostDetailPage() {
                             </button>
                           </div>
                         </div>
-                        <p className="text-[14px] text-[#374151]">{comment.content}</p>
+                        <p className="text-[14px] text-[#374151]">
+                          {comment.content}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -340,17 +343,57 @@ export default function PostDetailPage() {
             <Link href="/faq">FAQ</Link>
           </div>
           <div className="footer-social-icons">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/facebook.png" alt="Facebook" width={20} height={20} />
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/facebook.png"
+                alt="Facebook"
+                width={20}
+                height={20}
+              />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/tw.png" alt="Twitter" width={20} height={20} />
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/tw.png"
+                alt="Twitter"
+                width={20}
+                height={20}
+              />
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/youtube.png" alt="YouTube" width={20} height={20} />
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/youtube.png"
+                alt="YouTube"
+                width={20}
+                height={20}
+              />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/insta.png" alt="Instagram" width={20} height={20} />
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/insta.png"
+                alt="Instagram"
+                width={20}
+                height={20}
+              />
             </a>
           </div>
         </div>

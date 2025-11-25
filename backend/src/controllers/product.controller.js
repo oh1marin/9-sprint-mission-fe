@@ -1,0 +1,307 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+function mapProductToResponse(p, extra = {}) {
+  const images = Array.isArray(p.images)
+    ? p.images
+    : p.item
+    ? [p.item]
+    : [];
+
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    price: p.price,
+    tags: p.tags || [],
+    images,
+    favoriteCount: p.favoriteCount || 0,
+    createdAt: p.createdAt,
+    ownerId: p.ownerId || null,
+    ownerNickname: p.owner?.nickname || null,
+    ...extra,
+  };
+}
+
+export async function createProduct(req, res, next) {
+  try {
+    const { name, price, description, images, tags } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: '로그인 후 이용해주세요.' });
+    }
+
+    const product = await prisma.product.create({
+      data: {
+        name,
+        price,
+        description,
+        images: images || [],
+        tags: tags || [],
+        ownerId: userId,
+      },
+      include: {
+        owner: {
+          select: {
+            nickname: true
+          }
+        }
+      }
+    });
+
+    res.status(201).json(mapProductToResponse(product));
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getProducts(req, res, next) {
+  try {
+    const {
+      page = 1,
+      pageSize = 10,
+      orderBy = 'recent',
+      keyword = '',
+    } = req.query;
+
+    const skip = (page - 1) * pageSize;
+
+    const where = {};
+    if (keyword) {
+      where.name = {
+        contains: keyword,
+        mode: 'insensitive'
+      };
+    }
+
+    const orderByOption =
+      orderBy === 'favorite'
+        ? { favoriteCount: 'desc' }
+        : { createdAt: 'desc' };
+
+    const products = await prisma.product.findMany({
+      where,
+      orderBy: orderByOption,
+      skip: parseInt(skip),
+      take: parseInt(pageSize),
+      include: {
+        owner: {
+          select: {
+            nickname: true
+          }
+        }
+      }
+    });
+
+    const totalCount = await prisma.product.count({ where });
+
+    const list = products.map((p) => mapProductToResponse(p));
+
+    res.json({ totalCount, list });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getBestProducts(req, res, next) {
+  try {
+    const limit = parseInt(req.query.limit || 20);
+
+    const products = await prisma.product.findMany({
+      orderBy: { favoriteCount: 'desc' },
+      take: limit,
+      include: {
+        owner: {
+          select: {
+            nickname: true
+          }
+        }
+      }
+    });
+
+    const list = products.map((p) => mapProductToResponse(p));
+
+    res.json(list);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getProductDetail(req, res, next) {
+  try {
+    const { productId } = req.params;
+
+    const product = await prisma.product.findUnique({
+      where: { id: parseInt(productId) },
+      include: {
+        owner: {
+          select: {
+            nickname: true
+          }
+        }
+      }
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
+    }
+
+    res.json(mapProductToResponse(product));
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateProduct(req, res, next) {
+  try {
+    const { productId } = req.params;
+    const { name, price, description, images, tags } = req.body;
+    const userId = req.user?.id;
+
+    const product = await prisma.product.findUnique({
+      where: { id: parseInt(productId) }
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
+    }
+
+    if (product.ownerId !== userId) {
+      return res.status(403).json({ message: '수정 권한이 없습니다.' });
+    }
+
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (price !== undefined) updateData.price = price;
+    if (description !== undefined) updateData.description = description;
+    if (images !== undefined) updateData.images = images;
+    if (tags !== undefined) updateData.tags = tags;
+
+    const updated = await prisma.product.update({
+      where: { id: parseInt(productId) },
+      data: updateData,
+      include: {
+        owner: {
+          select: {
+            nickname: true
+          }
+        }
+      }
+    });
+
+    res.json(mapProductToResponse(updated));
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteProduct(req, res, next) {
+  try {
+    const { productId } = req.params;
+    const userId = req.user?.id;
+
+    const product = await prisma.product.findUnique({
+      where: { id: parseInt(productId) }
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
+    }
+
+    if (product.ownerId !== userId) {
+      return res.status(403).json({ message: '삭제 권한이 없습니다.' });
+    }
+
+    await prisma.product.delete({
+      where: { id: parseInt(productId) }
+    });
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function addFavorite(req, res, next) {
+  try {
+    const { productId } = req.params;
+    const userId = req.user?.id;
+
+    const exists = await prisma.favorite.findUnique({
+      where: {
+        userId_productId: {
+          userId: userId,
+          productId: parseInt(productId)
+        }
+      }
+    });
+
+    if (exists) {
+      return res.status(400).json({ message: '이미 좋아요를 눌렀습니다.' });
+    }
+
+    await prisma.favorite.create({
+      data: {
+        userId: userId,
+        productId: parseInt(productId)
+      }
+    });
+
+    await prisma.product.update({
+      where: { id: parseInt(productId) },
+      data: {
+        favoriteCount: {
+          increment: 1
+        }
+      }
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function removeFavorite(req, res, next) {
+  try {
+    const { productId } = req.params;
+    const userId = req.user?.id;
+
+    const exists = await prisma.favorite.findUnique({
+      where: {
+        userId_productId: {
+          userId: userId,
+          productId: parseInt(productId)
+        }
+      }
+    });
+
+    if (!exists) {
+      return res.status(400).json({ message: '좋아요를 누른 기록이 없습니다.' });
+    }
+
+    await prisma.favorite.delete({
+      where: {
+        userId_productId: {
+          userId: userId,
+          productId: parseInt(productId)
+        }
+      }
+    });
+
+    await prisma.product.update({
+      where: { id: parseInt(productId) },
+      data: {
+        favoriteCount: {
+          decrement: 1
+        }
+      }
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+}

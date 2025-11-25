@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
-/* ===== 기본 설정 ===== */
+* {
+  text-align: inherit;
+}
+
 body {
+  text-align: left;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   color: #333;
@@ -10,7 +14,6 @@ body {
   padding: 0;
 }
 
-/* ===== 헤더 네비게이션 ===== */
 .header-nav {
   position: fixed;
   top: 0;
@@ -99,7 +102,6 @@ body {
   background: #2563eb;
 }
 
-/* ===== 페이지 레이아웃 ===== */
 .page-container {
   min-height: 100vh;
   display: flex;
@@ -124,7 +126,6 @@ body {
   align-items: flex-start;
 }
 
-/* ===== 폼 공통 스타일 ===== */
 .form-container {
   width: 640px;
   background: transparent;
@@ -146,8 +147,8 @@ body {
   object-fit: contain;
 }
 
-.input-group {
-  margin: 14px 0;
+.input-group * {
+  text-align: left !important;
 }
 
 .input-label {
@@ -160,22 +161,24 @@ body {
 }
 
 .text-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 16px;
+  width: 100% !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  padding: 0 16px !important;
   font-size: 16px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   background: #f3f4f6;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
   font-family: 'Pretendard', sans-serif;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .text-input:focus {
   outline: none;
   border-color: #3692ff;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(54, 146, 255, 0.12);
 }
 
 .text-input::placeholder {
@@ -185,17 +188,21 @@ body {
 
 .text-input.error {
   border-color: #dc2626 !important;
-  background: #fef2f2;
+  background: #fef2f2 !important;
 }
 
 .error-message {
-  color: #dc2626;
-  font-size: 12px;
-  font-weight: 400;
-  margin-top: 4px;
-  margin-bottom: 8px;
-  font-family: 'Pretendard', sans-serif;
+  color: #dc2626 !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  margin-top: 4px !important;
+  font-family: 'Pretendard', sans-serif !important;
+  display: block !important;
+  height: 16px !important;
+  text-align: left !important;
+  direction: ltr !important;
 }
+
 
 .password-container {
   position: relative;
@@ -228,6 +235,7 @@ body {
   cursor: not-allowed;
   margin-top: 10px;
   font-family: 'Pretendard', sans-serif;
+  text-align: center;
 }
 
 .submit-button.active {
@@ -235,7 +243,6 @@ body {
   cursor: pointer;
 }
 
-/* ===== 소셜 로그인 ===== */
 .social-login-bar {
   display: flex;
   align-items: center;
@@ -297,7 +304,6 @@ body {
   font-weight: 700;
 }
 
-/* ===== 빈 페이지 스타일 ===== */
 .empty-page-container {
   flex: 1;
   display: flex;
@@ -347,7 +353,6 @@ body {
   box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
 }
 
-/* ===== 랜딩 페이지 스타일 ===== */
 .hero-section {
   background: #bfdbfe;
   height: 400px;
@@ -441,7 +446,6 @@ body {
   max-height: none;
 }
 
-/* ===== 마켓 페이지 스타일 ===== */
 .section-title {
   font-size: 24px;
   font-weight: 700;
@@ -673,7 +677,6 @@ body {
   color: #9ca3af;
 }
 
-/* ===== 푸터 ===== */
 .footer {
   background: #111827;
   padding: 32px 0;
@@ -734,7 +737,6 @@ body {
   color: #d1d5db;
 }
 
-/* ===== 반응형 디자인 ===== */
 @media (min-width: 1200px) {
   .best-products-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -903,4 +905,50 @@ body {
     width: 100%;
     height: auto;
   }
+
+  .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 540px;
+  height: 250px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.modal-content p {
+  font-size: 20px;
+  color: #1f2937;
+  margin-top: 20px;
+}
+
+.modal-button {
+  width: 180px;
+  height: 48px;
+  background: #2f80ed;
+  border: none;
+  color: white;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 0 auto 10px;
+}
+
+.modal-button:hover {
+  background: #256ee8;
+}
+
 }

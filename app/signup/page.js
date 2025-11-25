@@ -4,253 +4,253 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuth } from '@/hooks/useAuth';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+
+const MODAL_MESSAGES = {
+  PASSWORD_NOT_MATCH: '비밀번호가 일치하지 않습니다.',
+  EMAIL_ALREADY_USED: '사용 중인 이메일입니다.',
+  SIGNUP_SUCCESS: '가입 완료되었습니다.',
+};
 
 export default function SignupPage() {
   const router = useRouter();
-  const { register } = useAuth();
-  
-  const [formData, setFormData] = useState({
-    email: '',
-    nickname: '',
-    password: '',
-    passwordConfirm: ''
-  });
-  
-  const [errors, setErrors] = useState({
-    email: '',
-    nickname: '',
-    password: '',
-    passwordConfirm: ''
-  });
-  
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  
-  const [touched, setTouched] = useState({
-    email: false,
-    nickname: false,
-    password: false,
-    passwordConfirm: false
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    watch,
+    getValues,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: { email: '', nickname: '', password: '', passwordConfirm: '' },
   });
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const isFormValid =
+    isValid &&
+    watch('email') &&
+    watch('nickname') &&
+    watch('password') &&
+    watch('passwordConfirm');
 
-  const validatePassword = (password) => {
-    return password.length >= 8;
-  };
-
-  const validateEmailField = (value) => {
-    if (!value) return '이메일을 입력해주세요.';
-    if (!validateEmail(value)) return '잘못된 이메일 형식입니다';
-    return '';
-  };
-
-  const validatePasswordField = (value) => {
-    if (!value) return '비밀번호를 입력해주세요.';
-    if (!validatePassword(value)) return '비밀번호를 8자 이상 입력해주세요.';
-    return '';
-  };
-
-  const validatePasswordConfirmField = (value) => {
-    if (!value) return '비밀번호 확인을 입력해주세요.';
-    if (value !== formData.password) return '비밀번호가 일치하지 않습니다.';
-    return '';
-  };
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-    
-    if (touched[id]) {
-      let error = '';
-      if (id === 'email') error = validateEmailField(value);
-      else if (id === 'password') error = validatePasswordField(value);
-      else if (id === 'passwordConfirm') error = validatePasswordConfirmField(value);
-      
-      setErrors(prev => ({ ...prev, [id]: error }));
-      
-      if (id === 'password' && formData.passwordConfirm && touched.passwordConfirm) {
-        setErrors(prev => ({
-          ...prev,
-          passwordConfirm: value !== formData.passwordConfirm ? '비밀번호가 일치하지 않습니다.' : ''
-        }));
-      }
-    }
-  };
-
-  const handleBlur = (e) => {
-    const { id, value } = e.target;
-    setTouched(prev => ({ ...prev, [id]: true }));
-    
-    let error = '';
-    if (id === 'email') error = validateEmailField(value);
-    else if (id === 'password') {
-      error = validatePasswordField(value);
-      if (formData.passwordConfirm) {
-        setErrors(prev => ({
-          ...prev,
-          passwordConfirm: validatePasswordConfirmField(formData.passwordConfirm)
-        }));
-      }
-    }
-    else if (id === 'passwordConfirm') error = validatePasswordConfirmField(value);
-    
-    setErrors(prev => ({ ...prev, [id]: error }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    const emailError = validateEmailField(formData.email);
-    const passwordError = validatePasswordField(formData.password);
-    const confirmError = validatePasswordConfirmField(formData.passwordConfirm);
-    
-    setErrors({
-      email: emailError,
-      nickname: '',
-      password: passwordError,
-      passwordConfirm: confirmError
-    });
-    
-    if (emailError || passwordError || confirmError) return;
-    
-    try {
-      await register({
-        email: formData.email,
-        nickname: formData.nickname,
-        password: formData.password
+  const signupMutation = useMutation({
+    mutationFn: async ({ email, nickname, password }) => {
+      const response = await fetch('/api/auth/signup', {   // ✅ 소문자 signup
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, nickname, password }),
       });
-      router.push('/login');
-    } catch (error) {
-      if (error.message.includes('이메일')) {
-        alert('사용 중인 이메일입니다');
-      } else {
-        alert(error.message || '회원가입에 실패했습니다.');
+
+      const text = await response.text();
+      console.log('SIGNUP RAW RESPONSE:', text);
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error('서버에서 JSON이 아니라 다른 응답이 왔습니다.');
       }
+
+      if (!response.ok) {
+        if (data.message === '이미 사용 중인 이메일입니다.') {
+          throw new Error(MODAL_MESSAGES.EMAIL_ALREADY_USED);
+        }
+        throw new Error(data.message || '회원가입에 실패했습니다.');
+      }
+
+      return data;
+    },
+
+    onSuccess: (data) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('accessToken', data.accessToken);
+      }
+
+      setModalMessage(MODAL_MESSAGES.SIGNUP_SUCCESS);
+      setShowModal(true);
+
+      setTimeout(() => {
+        setShowModal(false);
+        router.push('/market');
+      }, 1500);
+    },
+
+    onError: (error) => {
+      setModalMessage(error.message);
+      setShowModal(true);
+    },
+  });
+
+  const onSubmit = () => {
+    const { password, passwordConfirm } = getValues();
+
+    if (password !== passwordConfirm) {
+      setModalMessage(MODAL_MESSAGES.PASSWORD_NOT_MATCH);
+      setShowModal(true);
+      return;
     }
+
+    signupMutation.mutate({
+      email: getValues('email'),
+      nickname: getValues('nickname'),
+      password: getValues('password'),
+    });
   };
 
-  const isFormValid = 
-    formData.email && 
-    formData.nickname && 
-    formData.password && 
-    formData.passwordConfirm && 
-    !errors.email && 
-    !errors.password && 
-    !errors.passwordConfirm;
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && isFormValid) {
+      e.preventDefault();
+      handleSubmit(onSubmit)();
+    }
+  };
 
   return (
     <div className="page-container">
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-9999">
+          <div className="w-[540px] h-[250px] bg-white rounded-2xl shadow-2xl px-8 py-10 flex flex-col items-center justify-between text-center">
+            <div className="flex items-center justify-center h-full w-full">
+              <p className="text-[20px] text-gray-800">{modalMessage}</p>
+            </div>
+            <button
+              onClick={() => setShowModal(false)}
+              className="w-44 h-12 flex items-center justify-center rounded-xl bg-[#2f80ed] text-white text-[18px] hover:bg-[#256ee8] transition-colors"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
       <nav className="header-nav">
         <div className="nav-container">
           <Link href="/" className="brand-logo">
-            <Image src="/images/pandalogo.png" alt="판다마켓 로고" width={120} height={40} />
+            <Image src="/images/pandalogo.png" alt="logo" width={120} height={40} />
           </Link>
-          <Link href="/login" className="login-button">로그인</Link>
+          <div className="nav-menu-group">
+            <Link href="/board" className="board-link">자유게시판</Link>
+            <Link href="/market" className="market-link">중고마켓</Link>
+          </div>
+          <div className="nav-right">
+            <Link href="/login" className="login-button">로그인</Link>
+          </div>
         </div>
       </nav>
 
       <main className="main-content center-container">
         <div className="form-container">
           <div className="form-logo">
-            <Image src="/images/pandalogo.png" alt="판다 로고" width={120} height={40} />
+            <Image src="/images/pandalogo.png" alt="logo" width={120} height={40} />
           </div>
 
-          <form id="signup-form" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
             <div className="input-group">
-              <label htmlFor="email" className="input-label">이메일</label>
+              <label className="input-label">이메일</label>
               <input
-                id="email"
                 type="email"
                 className={`text-input ${errors.email ? 'error' : ''}`}
                 placeholder="이메일을 입력해주세요"
-                value={formData.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
+                {...register('email', {
+                  required: '이메일을 입력해주세요.',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: '잘못된 이메일 형식입니다',
+                  },
+                })}
               />
-              {errors.email && <div className="error-message">{errors.email}</div>}
+              {errors.email && <div className="error-message">{errors.email.message}</div>}
             </div>
 
             <div className="input-group">
-              <label htmlFor="nickname" className="input-label">닉네임</label>
+              <label className="input-label">닉네임</label>
               <input
-                id="nickname"
                 type="text"
-                className="text-input"
+                className={`text-input ${errors.nickname ? 'error' : ''}`}
                 placeholder="닉네임을 입력해주세요"
-                value={formData.nickname}
-                onChange={handleChange}
-                required
+                {...register('nickname', { required: '닉네임을 입력해주세요.' })}
               />
+              {errors.nickname && <div className="error-message">{errors.nickname.message}</div>}
             </div>
 
             <div className="input-group">
-              <label htmlFor="password" className="input-label">비밀번호</label>
-              <div className="password-container">
+              <label className="input-label">비밀번호</label>
+              <div className="relative">
                 <input
-                  id="password"
                   type={showPassword ? 'text' : 'password'}
-                  className={`text-input ${errors.password ? 'error' : ''}`}
+                  className={`text-input pr-10 ${errors.password ? 'error' : ''}`}
                   placeholder="비밀번호를 입력해주세요"
-                  value={formData.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  required
+                  {...register('password', {
+                    required: '비밀번호를 입력해주세요.',
+                    minLength: { value: 8, message: '비밀번호를 8자 이상 입력해주세요.' },
+                  })}
                 />
                 <button
                   type="button"
-                  className="password-toggle-button"
+                  className="absolute inset-y-0 right-3 flex items-center justify-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? '🙈' : '👁'}
+                  <Image
+                    src={showPassword ? '/images/closeeye.png' : '/images/openeye.png'}
+                    width={20}
+                    height={20}
+                    alt="toggle"
+                  />
                 </button>
               </div>
-              {errors.password && <div className="error-message">{errors.password}</div>}
+              {errors.password && <div className="error-message">{errors.password.message}</div>}
             </div>
 
             <div className="input-group">
-              <label htmlFor="passwordConfirm" className="input-label">비밀번호 확인</label>
-              <div className="password-container">
+              <label className="input-label">비밀번호 확인</label>
+              <div className="relative">
                 <input
-                  id="passwordConfirm"
                   type={showPasswordConfirm ? 'text' : 'password'}
-                  className={`text-input ${errors.passwordConfirm ? 'error' : ''}`}
+                  className={`text-input pr-10 ${errors.passwordConfirm ? 'error' : ''}`}
                   placeholder="비밀번호를 다시 입력해주세요"
-                  value={formData.passwordConfirm}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  required
+                  {...register('passwordConfirm', { required: true })}
                 />
                 <button
                   type="button"
-                  className="password-toggle-button"
+                  className="absolute inset-y-0 right-3 flex items-center justify-center"
                   onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
                 >
-                  {showPasswordConfirm ? '🙈' : '👁'}
+                  <Image
+                    src={showPasswordConfirm ? '/images/closeeye.png' : '/images/openeye.png'}
+                    width={20}
+                    height={20}
+                    alt="toggle"
+                  />
                 </button>
               </div>
-              {errors.passwordConfirm && <div className="error-message">{errors.passwordConfirm}</div>}
+              {errors.passwordConfirm && (
+                <div className="error-message">비밀번호가 일치하지 않습니다.</div>
+              )}
             </div>
 
             <button
               type="submit"
               className={`submit-button ${isFormValid ? 'active' : ''}`}
-              disabled={!isFormValid}
+              disabled={!isFormValid || signupMutation.isPending}
             >
-              회원가입
+              {signupMutation.isPending ? '회원가입 중...' : '회원가입'}
             </button>
           </form>
 
           <div className="social-login-bar">
-            <span className="social-login-text">간편 회원가입하기</span>
+            <span className="social-login-text">간편 로그인하기</span>
             <div className="social-icons-container">
-              <a className="social-icon-link google" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">G</a>
-              <a className="social-icon-link kakao" href="https://www.kakaocorp.com/page/" target="_blank" rel="noopener noreferrer">K</a>
+              <a className="social-icon-link google" href="https://www.google.com" target="_blank">
+                <Image src="/images/google.png" alt="Google" width={20} height={20} />
+              </a>
+              <a className="social-icon-link kakao" href="https://www.kakaocorp.com/page" target="_blank">
+                <Image src="/images/kakao.png" alt="Kakao" width={20} height={20} />
+              </a>
             </div>
           </div>
 

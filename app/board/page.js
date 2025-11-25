@@ -1,27 +1,30 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
 
 export default function BoardPage() {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
   const [bestPosts, setBestPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [orderBy, setOrderBy] = useState('recent');
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [inputValue, setInputValue] = useState('');
+  const [orderBy, setOrderBy] = useState("recent");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     const fetchBestPosts = async () => {
       try {
-        const response = await fetch('https://panda-market-api.vercel.app/articles?orderBy=like&pageSize=3');
+        const response = await fetch(
+          "https://panda-market-api.vercel.app/articles?orderBy=like&pageSize=3"
+        );
         const data = await response.json();
         setBestPosts(data.list || []);
       } catch (error) {
-        console.error('베스트 게시글 로드 실패:', error);
+        console.error("베스트 게시글 로드 실패:", error);
       }
     };
 
@@ -33,7 +36,7 @@ export default function BoardPage() {
       setLoading(true);
       try {
         let url = `https://panda-market-api.vercel.app/articles?orderBy=${orderBy}&pageSize=10`;
-        
+
         if (searchKeyword) {
           url += `&keyword=${encodeURIComponent(searchKeyword)}`;
         }
@@ -42,7 +45,7 @@ export default function BoardPage() {
         const data = await response.json();
         setPosts(data.list || []);
       } catch (error) {
-        console.error('게시글 로드 실패:', error);
+        console.error("게시글 로드 실패:", error);
       } finally {
         setLoading(false);
       }
@@ -56,7 +59,7 @@ export default function BoardPage() {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
@@ -70,42 +73,42 @@ export default function BoardPage() {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return '';
+    if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '. ');
+    return date
+      .toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/\. /g, ". ");
   };
 
   return (
     <div className="page-container">
-      <header className="header-nav">
-        <div className="nav-container">
-          <Link href="/" className="brand-logo">
-            <Image src="/images/pandalogo.png" alt="" width={200} height={67} />
-          </Link>
-
-          <nav className="nav-menu-group">
-            <Link href="/board" className="board-link">
-              자유게시판
-            </Link>
-            <Link href="/market" className="market-link">
-              중고마켓
-            </Link>
-          </nav>
-
-          <div className="nav-right">
-            <Link href="/login" className="login-button">
-              로그인
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="main-content">
         <div className="center-container">
-          <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-            <section style={{ maxWidth: '1000px', margin: '0 auto', marginBottom: '60px' }}>
-              <h2 className="text-[20px] font-bold text-[#111827] mb-6">베스트 게시글</h2>
-              
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "1200px",
+              margin: "0 auto",
+              padding: "0 20px",
+            }}
+          >
+            <section
+              style={{
+                maxWidth: "1000px",
+                margin: "0 auto",
+                marginBottom: "60px",
+              }}
+            >
+              <h2 className="text-[20px] font-bold text-[#111827] mb-6">
+                베스트 게시글
+              </h2>
+
               {bestPosts.length === 0 ? (
                 <div className="text-center py-10 text-[#9ca3af]">
                   베스트 게시글을 불러오는 중입니다...
@@ -113,35 +116,37 @@ export default function BoardPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {bestPosts.map((post) => (
-                    <div 
-                      key={post.id} 
+                    <div
+                      key={post.id}
                       className="border border-[#e5e7eb] rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
                       onClick={() => handlePostClick(post.id)}
                     >
                       <div className="bg-[#3692FF] text-white text-[12px] px-3 py-1 rounded-full inline-block mb-3">
                         ⭐ Best
                       </div>
-                      
+
                       <div className="flex items-start gap-3">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-[16px] mb-2 line-clamp-2">{post.title}</h3>
+                          <h3 className="font-semibold text-[16px] mb-2 line-clamp-2">
+                            {post.title}
+                          </h3>
                         </div>
-                        
+
                         <div className="w-16 h-16 bg-[#e5e7eb] rounded-lg overflow-hidden flex-shrink-0">
                           {post.image && (
-                            <img 
-                              src={post.image} 
+                            <img
+                              src={post.image}
                               alt={post.title}
                               className="w-full h-full object-cover"
-                              style={{ display: 'block' }}
+                              style={{ display: "block" }}
                               onError={(e) => {
-                                e.target.style.display = 'none';
+                                e.target.style.display = "none";
                               }}
                             />
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center justify-between text-[12px] text-[#9ca3af] mt-4">
                         <span>판다마켓</span>
                         <div className="flex items-center gap-2">
@@ -155,18 +160,20 @@ export default function BoardPage() {
               )}
             </section>
 
-            <section style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <section style={{ maxWidth: "1000px", margin: "0 auto" }}>
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-[20px] font-bold text-[#111827]">게시글</h2>
-                  
+                  <h2 className="text-[20px] font-bold text-[#111827]">
+                    게시글
+                  </h2>
+
                   <Link href="/board/write">
                     <button className="rounded-lg bg-[#3692FF] px-5 py-2.5 text-white font-semibold whitespace-nowrap hover:bg-[#2563eb]">
                       + 글쓰기
                     </button>
                   </Link>
                 </div>
-                
+
                 <div className="flex items-center justify-between mb-6 gap-3">
                   <input
                     className="flex-1 rounded-lg border border-[#d1d5db] px-4 py-2.5 text-[14px] outline-none"
@@ -177,7 +184,7 @@ export default function BoardPage() {
                     onKeyPress={handleKeyPress}
                   />
 
-                  <select 
+                  <select
                     className="rounded-lg border border-[#d1d5db] px-4 py-2.5 text-[14px]"
                     value={orderBy}
                     onChange={handleSortChange}
@@ -188,19 +195,25 @@ export default function BoardPage() {
                 </div>
 
                 {loading ? (
-                  <div className="text-center py-16 text-[#6b7280]">게시글을 불러오는 중입니다...</div>
+                  <div className="text-center py-16 text-[#6b7280]">
+                    게시글을 불러오는 중입니다...
+                  </div>
                 ) : posts.length === 0 ? (
-                  <div className="text-center py-16 text-[#6b7280]">등록된 게시글이 없습니다.</div>
+                  <div className="text-center py-16 text-[#6b7280]">
+                    등록된 게시글이 없습니다.
+                  </div>
                 ) : (
                   <div className="space-y-4">
                     {posts.map((post) => (
-                      <div 
-                        key={post.id} 
+                      <div
+                        key={post.id}
                         className="border-b border-[#e5e7eb] pb-4 flex items-center justify-between hover:bg-[#f9fafb] p-3 rounded-lg transition-colors cursor-pointer"
                         onClick={() => handlePostClick(post.id)}
                       >
                         <div className="flex-1">
-                          <h3 className="font-semibold text-[16px] mb-2">{post.title}</h3>
+                          <h3 className="font-semibold text-[16px] mb-2">
+                            {post.title}
+                          </h3>
                           <div className="flex items-center gap-3 text-[14px] text-[#9ca3af]">
                             <span>판다마켓</span>
                             <span>{formatDate(post.createdAt)}</span>
@@ -209,13 +222,13 @@ export default function BoardPage() {
                         </div>
                         <div className="w-16 h-16 bg-[#e5e7eb] rounded-lg flex-shrink-0 ml-4 overflow-hidden">
                           {post.image && (
-                            <img 
-                              src={post.image} 
-                              alt="" 
+                            <img
+                              src={post.image}
+                              alt=""
                               className="w-full h-full object-cover"
-                              style={{ display: 'block' }}
+                              style={{ display: "block" }}
                               onError={(e) => {
-                                e.target.style.display = 'none';
+                                e.target.style.display = "none";
                               }}
                             />
                           )}
@@ -238,17 +251,57 @@ export default function BoardPage() {
             <Link href="/faq">FAQ</Link>
           </div>
           <div className="footer-social-icons">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/facebook.png" alt="Facebook" width={20} height={20} />
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/facebook.png"
+                alt="Facebook"
+                width={20}
+                height={20}
+              />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/tw.png" alt="Twitter" width={20} height={20} />
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/tw.png"
+                alt="Twitter"
+                width={20}
+                height={20}
+              />
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/youtube.png" alt="YouTube" width={20} height={20} />
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/youtube.png"
+                alt="YouTube"
+                width={20}
+                height={20}
+              />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-social-button">
-              <Image src="/images/insta.png" alt="Instagram" width={20} height={20} />
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-button"
+            >
+              <Image
+                src="/images/insta.png"
+                alt="Instagram"
+                width={20}
+                height={20}
+              />
             </a>
           </div>
         </div>
