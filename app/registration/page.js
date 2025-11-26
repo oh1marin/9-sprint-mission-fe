@@ -164,6 +164,7 @@ function RegistrationInner() {
         description: formData.description,
         price: Number(formData.price),
         tags: formData.tags,
+        images: images.map((img) => img.file),
       });
 
       alert("상품이 등록되었습니다!");

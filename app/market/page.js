@@ -115,17 +115,48 @@ function MarketInner() {
     }
   };
 
+  const formatPrice = (price) => {
+    if (!price && price !== 0) return "0원";
+    return new Intl.NumberFormat("ko-KR").format(price) + "원";
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    if (hours < 24) {
+      return hours < 1 ? "방금 전" : `${hours}시간 전`;
+    }
+    const days = Math.floor(hours / 24);
+    return `${days}일 전`;
+  };
+
   const renderProductCard = (product) => {
-    let imageUrl =
-      product.images && product.images.length > 0
-        ? product.images[0]
-        : product.item
-        ? product.item
-        : defaultImage.src;
+    const hasImages =
+      product.images &&
+      Array.isArray(product.images) &&
+      product.images.length > 0;
+
+    let imageUrl = hasImages
+      ? product.images[0]
+      : product.item
+      ? product.item
+      : defaultImage.src;
 
     if (imageUrl && !imageUrl.startsWith("http")) {
       imageUrl = `${API_BASE}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
     }
+
+    console.log(
+      "[MarketPage] product.id =",
+      product.id,
+      "images =",
+      product.images,
+      "final imageUrl =",
+      imageUrl
+    );
 
     return (
       <div key={product.id} className="product-card">
@@ -153,24 +184,6 @@ function MarketInner() {
         </div>
       </div>
     );
-  };
-
-  const formatPrice = (price) => {
-    if (!price && price !== 0) return "0원";
-    return new Intl.NumberFormat("ko-KR").format(price) + "원";
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = now - date;
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    if (hours < 24) {
-      return hours < 1 ? "방금 전" : `${hours}시간 전`;
-    }
-    const days = Math.floor(hours / 24);
-    return `${days}일 전`;
   };
 
   const renderPagination = () => {

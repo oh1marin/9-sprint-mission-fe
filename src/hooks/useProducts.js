@@ -1,20 +1,22 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from "react";
 
 const ProductContext = createContext(null);
 
 const API_BASE = (
   process.env.NEXT_PUBLIC_API_BASE ||
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  'http://localhost:4000'
-).replace(/\/+$/, '');
+  "http://localhost:4000"
+).replace(/\/+$/, "");
 
 function makeUrl(path, params) {
-  const url = new URL(path.startsWith('/') ? API_BASE + path : API_BASE + '/' + path);
+  const url = new URL(
+    path.startsWith("/") ? API_BASE + path : API_BASE + "/" + path
+  );
   if (params) {
     Object.entries(params).forEach(([key, val]) => {
-      if (val !== undefined && val !== null && val !== '') {
+      if (val !== undefined && val !== null && val !== "") {
         url.searchParams.set(key, String(val));
       }
     });
@@ -29,8 +31,9 @@ function pickArray(x) {
 }
 
 function getAuthHeaders() {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-  const headers = { Accept: 'application/json' };
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+  const headers = { Accept: "application/json" };
   if (token) headers.Authorization = `Bearer ${token}`;
   return headers;
 }
@@ -39,21 +42,27 @@ export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
-    sortBy: 'recent',
-    searchTerm: ''
+    sortBy: "recent",
+    searchTerm: "",
   });
 
-  async function fetchProducts({ page = 1, pageSize = 10, orderBy = 'recent', keyword = '' } = {}) {
+  async function fetchProducts({
+    page = 1,
+    pageSize = 10,
+    orderBy = "recent",
+    keyword = "",
+  } = {}) {
     setLoading(true);
     try {
       const params = { page, pageSize, orderBy };
       if (keyword) params.keyword = keyword;
 
-      const url = makeUrl('/products', params);
+      const url = makeUrl("/products", params);
+      console.log("[useProducts] GET", url);
 
       const res = await fetch(url, {
-        method: 'GET',
-        cache: 'no-store'
+        method: "GET",
+        cache: "no-store",
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -65,7 +74,7 @@ export function ProductProvider({ children }) {
 
       return {
         totalCount: data.totalCount ?? list.length,
-        list
+        list,
       };
     } finally {
       setLoading(false);
@@ -74,11 +83,11 @@ export function ProductProvider({ children }) {
 
   async function fetchBestItems() {
     try {
-      const url = makeUrl('/products/best', { limit: 20 });
+      const url = makeUrl("/products/best", { limit: 20 });
 
       const res = await fetch(url, {
-        method: 'GET',
-        cache: 'no-store'
+        method: "GET",
+        cache: "no-store",
       });
 
       if (!res.ok) return [];
@@ -93,9 +102,9 @@ export function ProductProvider({ children }) {
   async function fetchProductDetail(productId) {
     const url = makeUrl(`/products/${productId}`);
     const res = await fetch(url, {
-      method: 'GET',
-      cache: 'no-store',
-      headers: getAuthHeaders()
+      method: "GET",
+      cache: "no-store",
+      headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
@@ -103,28 +112,58 @@ export function ProductProvider({ children }) {
 
   async function fetchProductComments(productId) {
     const url = makeUrl(`/products/${productId}/comments`);
-    const res = await fetch(url, { method: 'GET', cache: 'no-store' });
+    const res = await fetch(url, { method: "GET", cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   }
 
-  async function createProduct(payload) {
-    const url = makeUrl('/products');
+  // 🔥 여기! JSON → FormData로 바꾼 createProduct
+  async function createProduct({ name, description, price, tags, images }) {
+    const url = makeUrl("/products");
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description ?? "");
+    formData.append("price", String(price));
+
+    if (Array.isArray(tags)) {
+      tags.forEach((tag) => {
+        if (tag) formData.append("tags", tag);
+      });
+    }
+
+    if (Array.isArray(images)) {
+      images.forEach((file) => {
+        if (file) formData.append("images", file);
+      });
+    }
+
+    const headers = getAuthHeaders(); // Authorization만 넣고 Content-Type은 브라우저에 맡김
+
     const res = await fetch(url, {
-      method: 'POST',
-      headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      method: "POST",
+      headers,
+      body: formData,
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    if (!res.ok) {
+      let text = "";
+      try {
+        text = await res.text();
+      } catch (e) {}
+      console.error("[useProducts] createProduct error response:", text);
+      throw new Error(`HTTP ${res.status}`);
+    }
+
     return await res.json();
   }
 
   async function updateProduct(productId, payload) {
     const url = makeUrl(`/products/${productId}`);
     const res = await fetch(url, {
-      method: 'PATCH',
-      headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      method: "PATCH",
+      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
@@ -132,8 +171,8 @@ export function ProductProvider({ children }) {
 
   async function deleteProduct(productId) {
     const res = await fetch(makeUrl(`/products/${productId}`), {
-      method: 'DELETE',
-      headers: getAuthHeaders()
+      method: "DELETE",
+      headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return true;
@@ -141,9 +180,9 @@ export function ProductProvider({ children }) {
 
   async function createProductComment(productId, payload) {
     const res = await fetch(makeUrl(`/products/${productId}/comments`), {
-      method: 'POST',
-      headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      method: "POST",
+      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
@@ -151,9 +190,9 @@ export function ProductProvider({ children }) {
 
   async function updateComment(commentId, payload) {
     const res = await fetch(makeUrl(`/comments/${commentId}`), {
-      method: 'PATCH',
-      headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      method: "PATCH",
+      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
@@ -161,8 +200,8 @@ export function ProductProvider({ children }) {
 
   async function deleteComment(commentId) {
     const res = await fetch(makeUrl(`/comments/${commentId}`), {
-      method: 'DELETE',
-      headers: getAuthHeaders()
+      method: "DELETE",
+      headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return true;
@@ -188,18 +227,16 @@ export function ProductProvider({ children }) {
       createProductComment,
       updateComment,
       deleteComment,
-      updateFilters
+      updateFilters,
     }),
     [products, loading, filters]
   );
 
-  return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;
+  return (
+    <ProductContext.Provider value={value}>{children}</ProductContext.Provider>
+  );
 }
 
 export function useProducts() {
-  const context = useContext(ProductContext);
-  if (!context) {
-    throw new Error('useProducts <ProductProvider> 안에서만 사용.');
-  }
-  return context;
+  return useContext(ProductContext);
 }
