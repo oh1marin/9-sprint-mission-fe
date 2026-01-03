@@ -2,6 +2,6 @@ POST http://localhost:4000/auth/signUp
 Content-Type: application/json
 
 {
-  "email": "marin11@marin11433.com" 
-, "password": "marin12334", "nickname": "marin1234445"
+  "email": "marin11@marin114333.com" 
+, "password": "marin123314", "nickname": "marin12334445"
 }
